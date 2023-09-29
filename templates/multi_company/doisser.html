@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 <style>
     /* Custom CSS for styling form elements */
@@ -211,8 +212,8 @@
 
     <!-- DataTable to display imported data -->
     <div class="table-responsive mt-4">
-      <table id="doisserTable" class="table table-bordered table-striped">
-        <thead>
+      <table id="exampleDT" class="table table-bordered display nowrap" cellspacing="0" style="width:100%">
+        <thead class="table-dark">
           <tr>
             <th>Date d'inscription</th>
             <th>Numéro EDOF</th>
@@ -565,6 +566,7 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <!-- Your JavaScript code -->
+
 <script>
 $(document).ready(function() {
   // Listen to the click event of the "Save Changes" button within the modals
@@ -605,6 +607,7 @@ $(document).ready(function() {
 {% block javascript %}
 <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.11.5/js/dataTables.bootstrap4.min.js"></script>
+<!-- Your JavaScript code
 <script>
   $(document).ready(function() {
     $('#doisserTable').DataTable({
@@ -629,6 +632,21 @@ $(document).ready(function() {
       ],
     });
 
+    
+  });
+</script>
+ -->
+
+
+<script>
+  $(document).ready(function() {
+    var table = $('#exampleDT').DataTable({
+      responsive: true,
+      order: [
+        [1, 'asc']
+      ]
+    });
+    // Handle "Select All" checkbox click
     
   });
 </script>
