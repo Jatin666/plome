@@ -282,6 +282,7 @@ def lead_dashboard(request, lead_id=None):
         # Check if the user selected a specific user filter
         selected_user_id = request.GET.get('user_id')
         selected_qualification = request.GET.get('qualification')
+        selected_company_id = request.GET.get('company_id')
 
 
         page_names = FacebookPage.objects.values_list('page_name', flat=True).distinct()
@@ -312,11 +313,20 @@ def lead_dashboard(request, lead_id=None):
 
         # Fetch all companies
         companies = Company.objects.all()
+        
 
         # Check if the user applied the page name filter
         selected_page_name = request.GET.get('page_name')
         if selected_page_name:
             filtered_leads = filtered_leads.filter(facebook_page__page_name=selected_page_name)
+
+         # Apply the company filter
+        if selected_company_id:
+            try:
+                selected_company = Company.objects.get(id=selected_company_id)
+                filtered_leads = filtered_leads.filter(company=selected_company)
+            except Company.DoesNotExist:
+                pass
 
         return render(request, 'lead/leads_dashboard.html', {'leads': filtered_leads, 'users': users, 'sections': nav_data,'page_names': page_names,'companies': companies})
 
@@ -458,52 +468,49 @@ import threading
 reminder_thread = threading.Thread(target=send_reminder_emails)
 reminder_thread.daemon = True
 reminder_thread.start()
-# def save_appointment(request):
-#     if request.method == 'POST':
-#         lead_id = request.POST.get('lead_id')
-#         appointment_date = request.POST.get('appointment_date')
-#         appointment_time = request.POST.get('appointment_time')
 
-#         lead = Lead.objects.get(pk=lead_id)
-#         lead.appointment_date_time = datetime.combine(
-#             datetime.strptime(appointment_date, '%Y-%m-%d').date(),
-#             datetime.strptime(appointment_time, '%H:%M').time()
-#         )
-#         lead.price = None 
-#         lead.save()
 
-#         LeadHistory.objects.create(
-#             user=request.user,
-#             lead=lead,
-#             changes=f'{request.user.username} has made an appointment on {appointment_date} @ {appointment_time}',
-#             category='other'
-#         )
-        
-#         send_mail(
-#             'Appointment Scheduled',
-#             f'Your appointment is scheduled on {lead.appointment_date_time}. ', #need to add the user name 
-#             'sender@example.com',
-#             [lead.email],
-#             fail_silently=False,
-#         )
-        
-        
-        
-#         return JsonResponse({'success': True})
-        
-#     return JsonResponse({'success': False})
+from django.http import JsonResponse
+
+def company_lead_summary(request):
+    # Get all companies
+    companies = Company.objects.all()
+
+    # Create a list to store company summaries
+    company_summaries = []
+
+    for company in companies:
+        # Count the number of leads associated with this company
+        lead_count = Lead.objects.filter(company=company).count()
+
+        # Calculate the total price of leads associated with this company
+        total_price = Lead.objects.filter(company=company).aggregate(total_price=models.Sum('price'))['total_price']
+
+        # Create a dictionary for the company summary
+        company_summary = {
+            'company_name': company.name,
+            'lead_count': lead_count,
+            'total_price': total_price or 0,  # Set total_price to 0 if it's None
+        }
+
+        # Add the company summary to the list
+        company_summaries.append(company_summary)
+
+    # Return a JSON response
+    return JsonResponse({'company_summaries': company_summaries})
 
 from decimal import Decimal
 from multi_company.models import Doisser
-from leads.models import LeadHistory, Company, CustomUserTypes, Notification
+from leads.models import LeadHistory  # Import the LeadHistory model from the "leads" app
 from django.db import models  # Import models module
 
-def transfer_lead_to_doisser(request, lead, company_id=None):
-    print(f"Starting transfer for Lead {lead.id}")
+def set_default_values(instance, int_fields, bool_fields):
+    for field_name in int_fields:
+        setattr(instance, field_name, 0)
+    for field_name in bool_fields:
+        setattr(instance, field_name, False)
 
-    # Check the company_id input
-    print(f"company_id: {company_id}")
-
+def transfer_lead_to_doisser(request, lead):
     # Define the mapping between Lead and Doisser fields
     field_mapping = {
         'date_de_soumission': 'date_dinscription',
@@ -518,14 +525,6 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
         'company': 'company',
     }
 
-    if company_id is not None:
-        try:
-            company = Company.objects.get(id=company_id)
-        except Company.DoesNotExist:
-            company = None  # Handle the case when the company doesn't exist
-    else:
-        company = None
-
     # Create a new Doisser instance
     doisser_data = Doisser()
 
@@ -536,10 +535,21 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
         else:
             setattr(doisser_data, doisser_field, getattr(lead, lead_field, ''))
 
-    # Set the company for the Doisser instance if it exists
-    if company:
-        doisser_data.company = company
-        print(f"Assigned company to Doisser: {company.name}")
+    # Specify the names of integer and boolean fields in the Doisser model
+    int_fields = [
+        'criteres_com',
+        'inscription_visio_entree_somme_facturee',
+        # Add other integer field names here
+    ]
+
+    bool_fields = [
+        'inscription_visio_entree_audio',
+        'inscription_visio_entree_facture',
+        # Add other boolean field names here
+    ]
+
+    # Set default values for specified integer and boolean fields
+    set_default_values(doisser_data, int_fields, bool_fields)
 
     # Set default datetime value for date and time fields
     default_datetime = '1900-01-01 00:00:00'
@@ -552,13 +562,6 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
 
     # Save the Doisser instance
     doisser_data.save()
-    print(f"Saved Doisser instance: {doisser_data}")
-
-    # Update the company of the lead (if provided) after saving to Doisser
-    if company:
-        lead.company = company
-        lead.save()
-        print(f"Updated Lead with company: {lead.company.name}")
 
     # Retrieve all LeadHistory entries related to the lead
     lead_history_entries = LeadHistory.objects.filter(lead=lead)
@@ -572,6 +575,7 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
     history_entry = LeadHistory(
         user=request.user,  # User making the transfer
         previous_assigned_to=lead.assigned_to,  # Previous assigned user
+        #current_assigned_to=doisser_data.conseiller,  # New assigned user in Doissertransfer
         changes="Lead transferred to Doisser",
         doisser=doisser_data,  # Link to the Doisser instance
         lead=lead,  # Link to the lead being transferred
@@ -584,6 +588,8 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
     lead.is_transferred = True
     lead.save()
 
+    print(f"Copying data from Lead {lead.id} to Doisser...")  # Debugging print statement
+
     # Notify superusers about the new lead in Doisser
     superusers = CustomUserTypes.objects.filter(is_superuser=True)
     notification_message = f'New lead transferred to Doisser: {lead.nom_de_la_campagne}. Please check.'
@@ -593,23 +599,23 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
         notification = Notification(user=user, lead=lead, message=notification_message)
         notification.save()
 
-    
-# Retrieve the updated lead history for the transferred lead
+    # Retrieve the updated lead history for the transferred lead
     lead_history = LeadHistory.objects.filter(lead=lead).order_by('-timestamp')
 
-    # Include lead history and company in the context
+    # Include lead history in the context
     context = {
         'doisser_data': doisser_data,
         'lead_history': lead_history,
-        'company': company,
     }
 
-    print(f"Transfer completed for Lead {lead.id}")
+    lead.is_active = False
+    lead.save()
+    print(f"Deactivated Lead {lead.id}")
+
     return context
 
 
-
-
+# working
 # from decimal import Decimal
 # from multi_company.models import Doisser
 # from leads.models import LeadHistory  # Import the LeadHistory model from the "leads" app
@@ -626,6 +632,7 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
 #         'qualification': 'qualification',
 #         'comments': 'comments',
 #         'assigned_to': 'conseiller',
+#         'company': 'company',
 #     }
 
 #     # Create a new Doisser instance
@@ -637,6 +644,8 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
 #             setattr(doisser_data, 'prix_net', Decimal(str(getattr(lead, lead_field, 0))))
 #         else:
 #             setattr(doisser_data, doisser_field, getattr(lead, lead_field, ''))
+#         # Set default values for integer fields as 0 and boolean fields as False
+    
 
 #     # Set default datetime value for date and time fields
 #     default_datetime = '1900-01-01 00:00:00'
@@ -700,49 +709,49 @@ def transfer_lead_to_doisser(request, lead, company_id=None):
 
 
 
-from django.shortcuts import render
-from .models import Company
+# from django.shortcuts import render
+# from .models import Company
 
-def list_companies(request):
-    companies = Company.objects.all()
+# def list_companies(request):
+#     companies = Company.objects.all()
 
-    context = {
-        'companies': companies,
-    }
+#     context = {
+#         'companies': companies,
+#     }
 
-    return render(request, 'lead/lead_dashboard.html', context)
+#     return render(request, 'lead/lead_dashboard.html', context)
 
 
-from django.http import JsonResponse
-from .models import Company
+# from django.http import JsonResponse
+# from .models import Company
 
-def get_companies(request):
-    companies = Company.objects.all().values('id', 'name')
-    return JsonResponse({'companies': list(companies)})
+# def get_companies(request):
+#     companies = Company.objects.all().values('id', 'name')
+#     return JsonResponse({'companies': list(companies)})
 
-from django.http import JsonResponse
-from .models import Lead, Company
+# from django.http import JsonResponse
+# from .models import Lead, Company
 
-def select_company(request, lead_id):
-    lead = get_object_or_404(Lead, id=lead_id)
-    companies = Company.objects.all()
+# def select_company(request, lead_id):
+#     lead = get_object_or_404(Lead, id=lead_id)
+#     companies = Company.objects.all()
 
-    if request.method == 'POST':
-        company_id = request.POST.get('company_id')
+#     if request.method == 'POST':
+#         company_id = request.POST.get('company_id')
 
-        if company_id:
-            try:
-                company = Company.objects.get(id=company_id)
-                lead.company = company
-                lead.save()
+#         if company_id:
+#             try:
+#                 company = Company.objects.get(id=company_id)
+#                 lead.company = company
+#                 lead.save()
 
-                # Return a JSON response to indicate success
-                return JsonResponse({'success': True, 'message': 'Company has been associated with the lead.'})
+#                 # Return a JSON response to indicate success
+#                 return JsonResponse({'success': True, 'message': 'Company has been associated with the lead.'})
 
-            except Company.DoesNotExist:
-                return JsonResponse({'success': False, 'error': 'Company not found'})
+#             except Company.DoesNotExist:
+#                 return JsonResponse({'success': False, 'error': 'Company not found'})
 
-    return JsonResponse({'success': False, 'error': 'Invalid request'})
+#     return JsonResponse({'success': False, 'error': 'Invalid request'})
 
 
 
@@ -943,6 +952,7 @@ from django.contrib.contenttypes.models import ContentType
 
 def lead_edit(request, lead_id):
     lead = get_object_or_404(Lead, id=lead_id)
+    company_id = None
 
     if request.method == 'POST':
         form_data = request.POST.copy()  # Make a copy of the POST data to modify it
@@ -1630,11 +1640,6 @@ def save_facebook_form_ids(request):
 
 import facebook
 from django.http import HttpResponse
-
-# views.py
-
-
-
 from django.shortcuts import render, redirect
 from .models import FacebookPage, token  # Import the Token model
 
@@ -1663,19 +1668,12 @@ def update_access_token(request):
 
 
 from .models import Lead, FacebookPage  # Import your Lead and FacebookPage models
-
-
-
-
 import csv
 import facebook
 from django.http import JsonResponse  # Import JsonResponse
 from .models import FacebookPage, Lead, token
 from django.http import JsonResponse
 import facebook
- # Import the Token model
-
-
 
 def fetch_facebook_leads(request):
     response_data = {}  # Create a dictionary to store response data
@@ -1780,35 +1778,149 @@ def fetch_facebook_leads(request):
 
 
 from django.shortcuts import render, redirect
-from .models import FacebookPage, CustomUserTypes  # Import the CustomUserTypes model
+from .models import FacebookPage, CustomUserTypes
 
 def map_facebook_pages_to_users(request):
     if request.method == 'POST':
-        # Get the selected page and user from the form submission
+        # Get the selected Facebook page and user who can fetch from the form submission
         selected_page_id = request.POST.get('selected_page')
         selected_user_id = request.POST.get('selected_user')
+        print("PageID",selected_page_id)
+        print("Page User",selected_user_id)
 
-        try:
-            # Retrieve the selected Facebook Page and User
-            selected_page = FacebookPage.objects.get(pk=selected_page_id)
-            selected_user = CustomUserTypes.objects.get(pk=selected_user_id)
-
-            # Update the user field for the Facebook Page
-            selected_page.user = selected_user
-            selected_page.save()
-
-            # Redirect to a success page or display a success message
-            return redirect('map_facebook_pages')  # Replace 'success_page' with the actual URL name
-        except (FacebookPage.DoesNotExist, CustomUserTypes.DoesNotExist):
-            # Handle cases where the selected page or user doesn't exist
-            error_message = "Selected Facebook Page or User not found."
+        # Check if selected_page_id and selected_user_id are empty or None
+        if not selected_page_id:
+            error_message = "Selected Facebook Page is required."
             return render(request, 'error_template.html', {'error_message': error_message})
 
-    # If the request method is not POST, or if the form hasn't been submitted
+        if not selected_user_id:
+            error_message = "Selected User is required."
+            return render(request, 'error_template.html', {'error_message': error_message})
+
+        try:
+            # Retrieve the selected Facebook Page
+            selected_page = FacebookPage.objects.get(pk=selected_page_id)
+
+            # Retrieve the user who can fetch
+            selected_user = CustomUserTypes.objects.get(pk=selected_user_id)
+
+            # Iterate through users to update permissions
+            for user in CustomUserTypes.objects.all():
+                # Update the user field for the Facebook Page
+                selected_page.user = user
+                selected_page.save()
+
+                # Update the "can fetch" permission for the user
+                user.can_fetch = user == selected_user
+                user.save()
+
+            # Ensure that the selected page is connected to all users
+            connect_page_to_all_users(selected_page)
+
+            # Redirect to a success page or display a success message
+            return redirect('map_facebook_pages')  # Replace with the actual URL name
+        except (FacebookPage.DoesNotExist, CustomUserTypes.DoesNotExist):
+            # Handle cases where the selected Facebook Page or user doesn't exist
+            error_message = "Selected Facebook Page or user not found."
+            return render(request, 'error_template.html', {'error_message': error_message})
+
+    # ... rest of your view code ...
+
+    
+
     # Retrieve a list of all Facebook Pages and Users for the template
     facebook_pages = FacebookPage.objects.all()
     users = CustomUserTypes.objects.all()
-    return render(request, 'lead/mapping_template.html', {'facebook_pages': facebook_pages, 'users': users})
+
+    # Filter and display only the unique Facebook pages
+    unique_pages = FacebookPage.objects.values('page_name').distinct()
+
+    return render(request, 'lead/mapping_template.html', {'facebook_pages': unique_pages, 'users': users})
+
+def connect_page_to_all_users(selected_page):
+    # Retrieve all existing users
+    users = CustomUserTypes.objects.all()
+
+    # Check if a FacebookPage instance already exists for this page and all users
+    existing_page = FacebookPage.objects.filter(page_name=selected_page.page_name, user__in=users)
+
+    if existing_page.exists():
+        # Delete all existing duplicate pages
+        existing_page.delete()
+
+    for user in users:
+        # Create a new FacebookPage instance for each user
+        new_page = FacebookPage(form_id=selected_page.form_id, page_name=selected_page.page_name, user=user)
+        new_page.save()
+
+def connect_all_new_pages_to_users():
+    # Retrieve all existing pages
+    existing_pages = FacebookPage.objects.all()
+
+    # Retrieve all existing users
+    users = CustomUserTypes.objects.all()
+
+    for page in existing_pages:
+        for user in users:
+            # Check if a FacebookPage instance already exists for this user and page
+            existing_page = FacebookPage.objects.filter(user=user, page_name=page.page_name).first()
+
+            # If no instance exists, create one
+            if not existing_page:
+                new_page = FacebookPage(form_id=page.form_id, page_name=page.page_name, user=user)
+                new_page.save()
+
+
+from django.shortcuts import render, redirect
+from .models import FacebookPage
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def create_facebook_page(request):
+    if request.method == 'POST':
+        form_id = request.POST['form_id']
+        page_name = request.POST['page_name']
+
+        # Create a new FacebookPage instance and save it to the database
+        facebook_page = FacebookPage(form_id=form_id, page_name=page_name, user=request.user)
+        messages.success(request, 'New Facebook page has been added and linked with all users.')
+        facebook_page.save()
+        #messages.success(request, 'New Facebook page has been added and linked with all users.')
+
+        # Redirect to a success page or wherever you want
+        return redirect('create_facebook_page')  # Replace with the actual URL name
+
+    return render(request, 'lead/add_page_template.html')
+
+# def map_facebook_pages_to_users(request):
+#     if request.method == 'POST':
+#         # Get the selected page and user from the form submission
+#         selected_page_id = request.POST.get('selected_page')
+#         selected_user_id = request.POST.get('selected_user')
+
+#         try:
+#             # Retrieve the selected Facebook Page and User
+#             selected_page = FacebookPage.objects.get(pk=selected_page_id)
+#             selected_user = CustomUserTypes.objects.get(pk=selected_user_id)
+
+#             # Update the user field for the Facebook Page
+#             selected_page.user = selected_user
+#             selected_page.save()
+
+#             # Redirect to a success page or display a success message
+#             return redirect('map_facebook_pages')  # Replace 'success_page' with the actual URL name
+#         except (FacebookPage.DoesNotExist, CustomUserTypes.DoesNotExist):
+#             # Handle cases where the selected page or user doesn't exist
+#             error_message = "Selected Facebook Page or User not found."
+#             return render(request, 'error_template.html', {'error_message': error_message})
+
+#     # If the request method is not POST, or if the form hasn't been submitted
+#     # Retrieve a list of all Facebook Pages and Users for the template
+#     facebook_pages = FacebookPage.objects.all()
+#     users = CustomUserTypes.objects.all()
+#     return render(request, 'lead/mapping_template.html', {'facebook_pages': facebook_pages, 'users': users})
+
+
 
 @login_required
 def fetch_sales_leads(request):
@@ -1824,6 +1936,11 @@ def fetch_sales_leads(request):
     try:
         # Get the currently logged-in user
         current_user = request.user  # Assumes you are using Django's built-in authentication
+
+        # Check if the user has permission to fetch leads (can_fetch is True)
+        if not current_user.can_fetch:
+            response_data['error'] = "You do not have permission to fetch leads."
+            return JsonResponse(response_data)
 
         # Retrieve all the Facebook pages associated with the current user
         user_facebook_pages = FacebookPage.objects.filter(user=current_user)
@@ -1916,9 +2033,119 @@ def fetch_sales_leads(request):
 
     return JsonResponse(response_data)
 
+
+# @login_required
+# def fetch_sales_leads(request):
+#     response_data = {}  # Create a dictionary to store response data
+
+#     try:
+#         token_instance = token.objects.latest('id')
+#         access_token = token_instance.access_token
+#     except token.DoesNotExist:
+#         response_data['error'] = "Access token not found. Please add an access token."
+#         return JsonResponse(response_data)
+
+#     try:
+#         # Get the currently logged-in user
+#         current_user = request.user  # Assumes you are using Django's built-in authentication
+
+#         # Retrieve all the Facebook pages associated with the current user
+#         user_facebook_pages = FacebookPage.objects.filter(user=current_user)
+#     except FacebookPage.DoesNotExist:
+#         response_data['error'] = "No Facebook pages found for the current user."
+#         return JsonResponse(response_data)
+
+#     for facebook_page in user_facebook_pages:
+#         try:
+#             graph = facebook.GraphAPI(access_token=access_token, version="3.0")
+
+#             leads = []
+#             cursor = None
+
+#             while True:
+#                 try:
+#                     params = {'fields': 'field_data,ad_id', 'limit': 100}
+#                     if cursor:
+#                         params['after'] = cursor
+#                     response = graph.get_object(f"/{facebook_page.form_id}/leads", **params)
+#                     leads.extend(response['data'])
+#                     if 'paging' in response and 'cursors' in response['paging']:
+#                         cursor = response['paging']['cursors']['after']
+#                     else:
+#                         break
+#                 except facebook.GraphAPIError as e:
+#                     response_data['error'] = f"Error retrieving leads: {e}"
+#                     return JsonResponse(response_data)
+
+#             for lead in leads:
+#                 # Check if the lead's Facebook ID has already been fetched
+#                 facebook_lead_id = lead.get('id')  # Assuming 'id' is the field that stores the Facebook ID
+#                 if not FetchedLead.objects.filter(facebook_lead_id=facebook_lead_id).exists():
+#                     # This lead is new; fetch and save it
+
+#                     # Your lead fetching and saving logic here
+#                     # For example:
+#                     name = None
+#                     email = None
+#                     phone = None
+#                     nom_de_la_campagne = None
+#                     avez_vous_travaille = None
+#                     status = None
+#                     date_de_soumission = None  # Initialize date_de_soumission
+
+#                     for field in lead['field_data']:
+#                         if field['name'] == 'full_name':
+#                             name = field['values'][0]
+#                         elif field['name'] == 'email':
+#                             email = field['values'][0]
+#                         elif field['name'] == 'phone_number':
+#                             phone = field['values'][0]
+#                         elif field['name'] == 'campaign_name':
+#                             nom_de_la_campagne = field['values'][0]
+#                         elif field['name'] == 'vous_avez_déjà_travaillé_?':
+#                             avez_vous_travaille = field['values'][0]
+#                         elif field['name'] == 'created_time':
+#                             date_de_soumission = field['values'][0]
+
+#                     if 'ad_id' in lead:
+#                         status = 'new'
+#                     else:
+#                         status = 'expired'
+
+#                     # Assign the lead to the user mapped to the Facebook page
+#                     assigned_user = facebook_page.user  # Assuming you have a 'user' field in your FacebookPage model
+
+#                     lead_instance = Lead(
+#                         nom_de_la_campagne=nom_de_la_campagne,
+#                         avez_vous_travaille=avez_vous_travaille,
+#                         nom_prenom=name,
+#                         telephone=phone,
+#                         email=email,
+#                         qualification=None,
+#                         comments=None,
+#                         assigned_to=assigned_user,
+#                         date_de_soumission=date_de_soumission,
+#                         facebook_page=facebook_page,
+#                         lead_source='facebook',
+#                     )
+#                     lead_instance.save()
+
+#                     # Store the Facebook ID of the fetched lead
+#                     fetched_lead = FetchedLead(lead=lead_instance, facebook_lead_id=facebook_lead_id)
+#                     fetched_lead.save()
+
+#             response_data['message'] = "Sales Leads fetched and saved to the database."
+#         except facebook.GraphAPIError as e:
+#             response_data['error'] = f"Error connecting to Facebook Graph API: {e}"
+
+#     return JsonResponse(response_data)
+
 @login_required
 def sales_lead(request):    
     qualification_filter = request.GET.get('qualification')
+    # Fetch all companies
+    companies = Company.objects.all()
+        
     
     # Filter the list of Facebook pages based on the currently logged-in user
     user_facebook_pages = FacebookPage.objects.filter(user=request.user)
@@ -1935,7 +2162,7 @@ def sales_lead(request):
     if qualification_filter:
         user_leads = user_leads.filter(qualification=qualification_filter)
 
-    return render(request, 'lead/sales_lead.html', {'leads': user_leads, 'page_names': user_facebook_pages})
+    return render(request, 'lead/sales_lead.html', {'leads': user_leads, 'page_names': user_facebook_pages,'companies': companies})
 
 
 # @login_required
@@ -2098,89 +2325,6 @@ def sales_lead(request):
 
 
 
-# views.py
-# from django.http import HttpResponse, HttpResponseRedirect
-# from django.urls import reverse
-# from .models import FacebookPage, Lead
-
-# from django.shortcuts import render, HttpResponse, redirect
-# from django.urls import reverse
-# from .models import FacebookPage, Lead
-# import facebook
-
-# def fetch_facebook_leads(request):
-#     if request.method == 'POST' and 'fetch_facebook_leads' in request.POST:
-#         # Get the selected page name from the form
-#         selected_page_name = request.POST.get('page_name')
-
-#         # Use the selected page name to fetch the associated form ID
-#         try:
-#             facebook_page = FacebookPage.objects.get(page_name=selected_page_name)
-#             form_id = facebook_page.form_id
-#         except FacebookPage.DoesNotExist:
-#             return HttpResponse("Selected Facebook page not found.")
-
-#         # Fetch data from Facebook using the retrieved form ID
-#         access_token = 'EAAKFt0cZC5JMBO2IqboZAxN01Qx7XbRUwfTA68E4I8kPg4VZA0tQKCaKNyXXq2q9iiZAeeUbhnNEVhnN7NruzZAvZAHx0ttyqrSRnqpQh9HAHLzGvB29N9zt3U65Xg9HE6vM8GfPCDE8hP3Fwt6Asd0Lj7UFokt3yeQBTARpDR4ZClJWF0ZClzJc4muRoiZAHvrh6PZACabUNBDwr8PKZCt0JnKrvvt'  # Replace with your access token
-#         try:
-#             graph = facebook.GraphAPI(access_token=access_token, version="3.0")
-#         except facebook.GraphAPIError as e:
-#             return HttpResponse(f"Error connecting to Facebook Graph API: {e}")
-
-#         leads = []
-#         cursor = None
-
-#         while True:
-#             try:
-#                 params = {'fields': 'field_data,ad_id', 'limit': 100}  # Adjust the limit as needed
-#                 if cursor:
-#                     params['after'] = cursor
-#                 response = graph.get_object(f"/{form_id}/leads", **params)
-#                 leads.extend(response['data'])
-#                 if 'paging' in response and 'cursors' in response['paging']:
-#                     cursor = response['paging']['cursors']['after']
-#                 else:
-#                     break
-#             except facebook.GraphAPIError as e:
-#                 return HttpResponse(f"Error retrieving leads: {e}")
-
-# # Create a mapping dictionary for field names
-#             field_mapping = {
-#                 'nom_de_la_campagne': 'nom_de_la_campagne',
-#                 'vous_avez_déjà_travaillé_?': 'avez_vous_travaille',
-#                 'full_name': 'nom_prenom',
-#                 'phone_number': 'telephone',
-#                 'email': 'email',
-#             }
-
-# # Process and save the fetched leads to the Lead model
-#         for lead_data in leads:
-#                 try:
-#                     lead = Lead(
-#                         nom_de_la_campagne=lead_data.get(field_mapping['nom_de_la_campagne'], ''),
-#                         avez_vous_travaille=lead_data.get(field_mapping['vous_avez_déjà_travaillé_?'], ''),
-#                         nom_prenom=lead_data.get(field_mapping['full_name'], ''),
-#                         telephone=lead_data.get(field_mapping['phone_number'], ''),
-#                         email=lead_data.get(field_mapping['email'], ''),
-#                         qualification=None,  # Set qualification if available
-#                         comments=None,  # Set comments if available
-#                         assigned_to=None,  # Set the assigned user if available
-#                     )
-#                     lead.facebook_page = facebook_page  # Associate the lead with the Facebook page
-#                     lead.save()
-#                     print(f"Processing after saving Lead Data: {lead_data}")
-#                 except Exception as e:
-#                     print(f"Error saving lead: {e}")
-
-
-#         # Fetch all leads after saving the Facebook leads
-#         filtered_leads = Lead.objects.all()
-#         print('************',filtered_leads)
-
-#         # Render a template to display the leads
-#         return render(request, 'lead/leads_dashboard.html', {'fetched_leads': filtered_leads})
-
-#     return HttpResponse("No action taken.")
 
 
 
@@ -2233,54 +2377,6 @@ def facebook_leads(request):
     }
     
     return render(request, 'lead/facebook_under.html', context)
-
-
-import os
-import pandas as pd
-import gspread
-from oauth2client.service_account import ServiceAccountCredentials
-from django.shortcuts import render
-# from .forms import GoogleSheetForm
-from .models import FacebookLead
-
-def gsheet(request):
-    if request.method == 'POST':
-        form = GoogleSheetForm(request.POST)
-        if form.is_valid():
-            sheet_link = form.cleaned_data['sheet_link']
-
-            # Set up Google Sheets API credentials
-            scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-            creds_path = os.path.join(os.path.dirname(__file__), 'credentials', 'your_credentials.json')  # Replace 'your_credentials.json' with the actual JSON file name
-            creds = ServiceAccountCredentials.from_json_keyfile_name(creds_path, scope)
-            client = gspread.authorize(creds)
-
-            # Open the Google Sheets document based on the provided link
-            try:
-                sheet = client.open_by_url(sheet_link).sheet1
-                data = sheet.get_all_values()
-
-                # Convert the data to a DataFrame using pandas
-                df = pd.DataFrame(data[1:], columns=data[0])
-
-                # Optionally, you can process the data as needed before saving it to the database
-
-                # Save the data to the database (assuming YourModel has the same column names as the Google Sheets)
-                for index, row in df.iterrows():
-                    your_model_instance = FacebookLead(
-                        column1=row['Column1'],  # Replace 'Column1', 'Column2', etc. with the actual column names in your Google Sheets
-                        column2=row['Column2'],
-                        # Add more columns as needed
-                    )
-                    your_model_instance.save()
-
-                return render(request, 'lead/g-sheet.html', {'form': form, 'success': True})
-            except gspread.exceptions.SpreadsheetNotFound:
-                return render(request, 'lead/g-sheet.html', {'form': form, 'error': 'Invalid Google Sheets link.'})
-    else:
-        form = GoogleSheetForm()
-
-    return render(request, 'lead/g-sheet.html', {'form': form})
 
 
 from django.http import JsonResponse
