@@ -102,14 +102,6 @@ DATABASES = {
      }
  }
 
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'plome',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'PORT': '5432'
-    }
-}
 
 # DATABASES = {
 #     'default': {
