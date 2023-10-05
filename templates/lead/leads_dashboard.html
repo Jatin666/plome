@@ -37,7 +37,7 @@
       gap: 10px;
     }
     .btn {
-      padding: 10px 15px;
+      padding: 7px 15px;
       border: none;
       border-radius: 5px;
       cursor: pointer;
@@ -123,7 +123,7 @@
       </div>
       {% endif %}
 
- <script>
+    <script>
         var customFieldCounter = 0;
 
         function addCustomField() {
@@ -249,108 +249,127 @@
         }
     </script>
 
-   
-<div class="container">
-  <div class="header">
-    <h2 class="page-title">Leads Dashboard</h2>
-    <div class="buttons">
-      <button class="btn add-button" data-toggle="modal" data-target="#defaultModal">Add Lead</button>
-      <button class="btn import-button" data-toggle="modal" data-target="#importModal">Import</button>
-      <a href="{% url 'export_leads' 'csv' %}" class="btn export-button">Export CSV</a>
-      <a href="{% url 'export_leads' 'xlsx' %}" class="btn export-button">Export XLSX</a>
-    </div>
-  </div>
-
-  <div class="filters">
-    <form method="GET" action="{% url 'lead_dashboard' %}" class="filter-form">
-      <div class="filter custom-dropdown">
-        <label for="user_filter">Filter by User:</label>
-        <select name="user_id" id="user_filter">
-          <option value="">All </option>
-          {% for user in users %}
-          <option value="{{ user.id }}" {% if request.GET.user_id == user.id|stringformat:"s" %}selected{% endif %}>
-            {{ user.username }}
-          </option>
-          {% endfor %}
-        </select>
+    <div class="container">
+      <div class="header">
+        <h2 class="page-title">Leads Dashboard</h2>
+      </div>
+      <div class="button mb-3">
+        <button class="btn add-button" data-toggle="modal" data-target="#defaultModal">Add Lead</button>
+        <button class="btn import-button ml-2" data-toggle="modal" data-target="#importModal">Import</button>
+        <a href="{% url 'export_leads' 'csv' %}" class="btn export-button ml-2">Export CSV</a>
+        <a href="{% url 'export_leads' 'xlsx' %}" class="btn export-button ml-2">Export XLSX</a>
+      </div>
+    
+      
+      <div class="filters">
+        <!--
+          <form method="GET" action="{% url 'lead_dashboard' %}" class="filter-form">
+            <div class="filter custom-dropdown">
+              <label for="user_filter">Filter by User:</label>
+              <select name="user_id" id="user_filter">
+                <option value="">All</option>
+                {% for user in users %}
+                <option value="{{ user.id }}" {% if request.GET.user_id == user.id|stringformat:"s" %}selected{% endif %}>
+                  {{ user.username }}
+                </option>
+                {% endfor %}
+              </select>
+            </div>
+      
+            <div class="filter custom-dropdown">
+              <label for="qualification_filter">Filter by Qualification:</label>
+              <select name="qualification" id="qualification_filter">
+                <option value="">Qualification</option>
+                <option value="nrp1">NRP1</option>
+                <option value="nrp2">NRP2</option>
+                <option value="nrp3">NRP3</option>
+              </select>
+            </div>
+            <button type="submit" class="btn apply-button">Apply Filters</button>
+          </form>
+        -->
+        <form method="GET" action="{% url 'lead_dashboard' %}" class="filter-form form-inline">
+          <div class="form-group" style="background-color: #313131; border-radius: 5px;">
+            <label for="user_filter" class="text-white ml-2 mr-2">Filtrer par Utilisateur :</label>
+            <select name="user_id" id="user_filter" class="form-control">
+              <option value="">Choisir l’utilisateur</option>
+              {% for user in users %}
+              <option value="{{ user.id }}" {% if request.GET.user_id == user.id|stringformat:"s" %}selected{% endif %}>
+                {{ user.username }}
+              </option>
+              {% endfor %}
+            </select>
+          </div>
+        
+          <div class="form-group" style="background-color: #313131; border-radius: 5px;">
+            <label for="qualification_filter" class="text-white ml-2 mr-2">Filtrer par Qualification :</label>
+            <select name="qualification" id="qualification_filter" class="form-control">
+              <option value="">Choisir qualification</option>
+              <option value="nrp1">NRP1</option>
+              <option value="nrp2">NRP2</option>
+              <option value="nrp3">NRP3</option>
+              <!-- Ajoutez les autres options ici -->
+            </select>
+          </div>
+          <input type="submit" value="Appliquer les filtres" class="btn btn-danger">
+          
+        </form>
+        
       </div>
       
-      <div class="filter custom-dropdown">
-        <label for="qualification_filter">Filter by Qualification:</label>
-        <select name="qualification" id="qualification_filter">
-          <option value=""> Qualification </option>
-          <option value="nrp1">NRP1</option>
-          <option value="nrp2">NRP2</option>
-          <option value="nrp3">NRP3</option>
-          <option value="en_cours">En cours</option>
-          <option value="rappel">Rappel</option>
-          <option value="faux_numero">Faux numéro</option>
-          <option value="pas_de_budget">Pas de budget</option>
-          <option value="pas_interesse">Pas intéressé</option>
-          <option value="ne_pas_rappele">Ne pas rappeler</option>
-          <option value="signe_pole_emploi">Signé Pôle Emploi</option>
-          <option value="signe_cpf">Signé CPF</option>
-        </select>
-      </div>
-      <button type="submit" class="btn apply-button">Apply Filters</button>
-    </form>
-  </div>
-
-  
-
-  <div class="filter custom-dropdown">
-    <label for="assignToUser">Assign to:</label>
-    <select id="assignToUser">
-      <option value="">Select User</option>
-      {% for user in users %}
-      <option value="{{ user.id }}">{{ user.username }}</option>
-      {% endfor %}
-    </select>
-    <button id="assignButton" class="btn assign-button">Assign</button>
-  </div>
-   <form method="post" action="{% url 'save_facebook_form_ids' %}">
-    {% csrf_token %}
-    Form ID's :
-    <button type="submit" name="save_facebook_form_ids">Save</button>
-</form>
-
-
-
-<form method="post" action="{% url 'fetch_facebook_leads' %}">
-    {% csrf_token %}
-    <div class="form-group">
-        <label for="page_filter">Filter by Facebook Page:</label>
-        <select name="page_name" id="page_filter">
-            <option value="">All</option>
-            {% for name in page_names %}
-                <option value="{{ name }}">{{ name }}</option>
-            {% endfor %}
-        </select>
-        <button type="submit" name="fetch_facebook_leads">Fetch Leads</button>
-    </div>
-</form>
-
-
-
-
-
-
-<!-- Your HTML template for adding or updating access tokens -->
-<form method="post" action="{% url 'update_access_token' %}">
-    {% csrf_token %}
     
-    <br>
-    <label for="access_token">Access Token:</label>
-    <input type="text" name="access_token" id="access_token">
-    <br>
-    <input type="submit" name="update_access_token" value="Update Access Token">
-</form>
+      <div class="form-inline">
+        <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
+          <label for="assignToUser" class="text-white ml-2 mr-2">Assign to :</label>
+          <select name="" id="assignToUser" class="form-control">
+            <option value="">Choisir un utilisateur</option>
+            {% for user in users %}
+            <option value="{{ user.id }}">{{ user.username }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <input type="submit" id="assignButton" value="Assign" class="btn btn-secondary">
 
+        <div class="form-group ml-3 mr-3">
+          <form method="post" action="{% url 'save_facebook_form_ids' %}">
+            {% csrf_token %}
+            <div class="form-control">
+              Form ID's:
+            </div>
+            <input type="submit" name="save_facebook_form_ids" value="Save" class="btn text-white" style="background-color: #36BCAF; border-radius: 5px;">
+          </form>
+        </div>
 
+        <form method="post" action="{% url 'fetch_facebook_leads' %}" class="form-inline">
+          {% csrf_token %}
+          <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
+            <label for="page_filter" class="text-white ml-2 mr-2">Filter by Facebook Page:</label>
+            <select class="form-control" class="form-control" name="page_name" id="page_filter">
+              <option value="">All</option>
+              {% for name in page_names %}
+              <option value="{{ name }}">{{ name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <input type="submit" name="fetch_facebook_leads" value="Fetch Leads" class="btn btn-secondary">
+        </form>
+      </div>
 
+       <div class="mt-3">
+            <!-- Votre modèle HTML pour l'ajout ou la mise à jour des jetons d'accès -->
+          <form method="post" action="{% url 'update_access_token' %}" class="form-inline">
+            {% csrf_token %}
+            <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
+            <label for="access_token" class="text-white ml-2 mr-2">Access Token:</label>
+            <input type="text" class="form-control" name="access_token" id="access_token">
+          </div>
+          <input type="submit" name="update_access_token" value="Update Access Token" class="btn btn-secondary">
 
-
-</div>
+          </form>
+       </div>
+  
+    </div>
+    
 
 
 
