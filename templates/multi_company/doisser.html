@@ -38,17 +38,17 @@
                 </div>
                 
                 <script>
-                function displayFileName() {
-                  const fileInput = document.getElementById('excel_file');
-                  const fileLabel = document.getElementById('file-label');
-                
-                  if (fileInput.files.length > 0) {
-                    const fileName = fileInput.files[0].name;
-                    fileLabel.innerText = fileName;
-                  } else {
-                    fileLabel.innerText = 'Experter un fichier CSV';
+                  function displayFileName() {
+                    const fileInput = document.getElementById('excel_file');
+                    const fileLabel = document.getElementById('file-label');
+                  
+                    if (fileInput.files.length > 0) {
+                      const fileName = fileInput.files[0].name;
+                      fileLabel.innerText = fileName;
+                    } else {
+                      fileLabel.innerText = 'Experter un fichier CSV';
+                    }
                   }
-                }
                 </script>
                 
                 <div class="input-group-append ml-1">
