@@ -4,7 +4,7 @@
 
 <head>
 
-  <title>Tiny Dashboard - A Bootstrap Dashboard Template</title>
+  <title>CRM | ADMIN</title>
 
 <style>
     .btn-primary {
@@ -91,9 +91,9 @@
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
         
-            <a class="dropdown-item" href="{% url 'admin_dashboard' %}">Dashboard</a>
-            <a class="dropdown-item" href="{% url 'profile_settings' %}">Settings</a>
-            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+            <a class="dropdown-item" href="{% url 'admin_dashboard' %}">Tableau de bord</a>
+            <a class="dropdown-item" href="{% url 'profile_settings' %}">Réglages</a>
+            <a class="dropdown-item" href="{% url 'logout' %}">Se déconnecter</a>
           </div>
         </li>
       </ul>
@@ -109,10 +109,10 @@
             <svg version="1.1" id="logo" class="navbar-brand-img brand-sm" xmlns="http://www.w3.org/2000/svg"
               xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 120 120" xml:space="preserve">
               <g>
-                <polygon class="st0" points="78,105 15,105 24,87 87,87 	" />
-                <polygon class="st0" points="96,69 33,69 42,51 105,51 	" />
-                <polygon class="st0" points="78,33 15,33 24,15 87,15 	" />
-              </g>
+								<polygon class="st0" style="fill: rgba(54, 188, 175, 1);" points="78,105 15,105 24,87 87,87" />
+								<polygon class="st0" style="fill: rgba(54, 188, 175, 1);" points="96,69 33,69 42,51 105,51" />
+								<polygon class="st0" style="fill: rgba(54, 188, 175, 1);" points="78,33 15,33 24,15 87,15" />
+							</g>
             </svg>
           </a>
         </div>
@@ -120,11 +120,11 @@
           <li class="nav-item dropdown">
             <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
               <i class="fe fe-home fe-16"></i>
-              <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
+              <span class="ml-3 item-text">Tableau de bord</span><span class="sr-only">(current)</span>
             </a>
             <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
               <li class="nav-item">
-                <a class="nav-link pl-3" href="{% url 'admin_dashboard' %}"><span class="ml-1">Home</span></a>
+                <a class="nav-link pl-3" href="{% url 'admin_dashboard' %}"><span class="ml-1">Accueil</span></a>
                 <!-- select_company.html -->
 
 
@@ -138,10 +138,10 @@
           <li class="nav-item dropdown">
             <a href="#user" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
               <i class="fe fe-user fe-16"></i>
-              <span class="ml-3 item-text">Users</span>
+              <span class="ml-3 item-text">Utilisateurs</span>
             </a>
             <ul class="collapse list-unstyled pl-4 w-100" id="user">
-              <a class="nav-link pl-3" href="{% url 'add_new_user' %}"><span class="ml-1">Add new users</span></a>
+              <a class="nav-link pl-3" href="{% url 'add_new_user' %}"><span class="ml-1">Ajouter des utilisateurs</span></a>
               <!-- <a class="nav-link pl-3" href="{% url 'deactivate-users' %}"><span class="ml-1">Deactivate users</span></a> -->
 
             </ul>
@@ -154,16 +154,15 @@
             </a>
             <ul class="collapse list-unstyled pl-4 w-100" id="forms">
               <li class="nav-item">
-                <a class="nav-link pl-3" href="{% url 'lead_dashboard' %}"><span class="ml-1 item-text">Add
-                    leads</span></a>
+                <a class="nav-link pl-3" href="{% url 'lead_dashboard' %}"><span class="ml-1 item-text">Ajouter des leads</span></a>
               </li>
 <li class="nav-item dropdown">
   <a class="nav-link dropdown-toggle pl-3" href="#" id="facebookLeadsDropdown" role="button" data-toggle="dropdown"
     aria-haspopup="true" aria-expanded="false">
-    <span class="ml-1 item-text">Facebook leads</span>
+    <span class="ml-1 item-text">Leads Facebook</span>
   </a>
   <div class="dropdown-menu no-box" aria-labelledby="facebookLeadsDropdown">
-    <a class="dropdown-item" href="{% url 'create_facebook_page' %}">Create FB pages</a>
+    <a class="dropdown-item" href="{% url 'create_facebook_page' %}">Créer des pages FB</a>
     <a class="dropdown-item" href="{% url 'map_facebook_pages' %}">Mapping</a>
   </div>
 </li>
@@ -171,8 +170,7 @@
 
 
               <li class="nav-item">
-                <a class="nav-link pl-3" href="{% url 'deactivated_leads' %}"><span class="ml-1 item-text">Deactivate
-                    Leads</span></a>
+                <a class="nav-link pl-3" href="{% url 'deactivated_leads' %}"><span class="ml-1 item-text">Désactiver les Leads</span></a>
               </li>
             
 
@@ -183,11 +181,11 @@
           <li class="nav-item dropdown">
             <a href="#profile" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
               <i class="fe fe-user fe-16"></i>
-              <span class="ml-3 item-text">Profile</span>
+              <span class="ml-3 item-text">Profil</span>
             </a>
             <ul class="collapse list-unstyled pl-4 w-100" id="profile">
              
-                <a class="nav-link pl-3" href="{% url 'profile_settings' %}"><span class="ml-1">Settings</span></a>
+                <a class="nav-link pl-3" href="{% url 'profile_settings' %}"><span class="ml-1">Réglages</span></a>
               </li>
 
             </ul>
@@ -199,7 +197,7 @@
             <li class="nav-item dropdown">
             <a href="#doisser" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
               <i class="fe  fe-activity fe-16"></i>
-              <span class="ml-3 item-text">Doisser</span>
+              <span class="ml-3 item-text">Dossier</span>
             </a>
             <ul class="collapse list-unstyled pl-4 w-100" id="doisser">
              
@@ -224,8 +222,8 @@
 
          
 <div class="btn-box w-100 mt-4 mb-1">
-    <a href="{% url 'logout' %}" class="btn mb-2 btn-primary btn-lg btn-block">
-        <i class="fe fe-log-out fe-12 mx-2"></i><span class="small">Logout</span>
+    <a href="{% url 'logout' %}" class="btn mb-2 btn-lg btn-block text-white" style="background-color: rgba(54,188,175,1);">
+        <i class="fe fe-log-out fe-12 mx-2"></i><span class="small">Se déconnecter</span>
     </a>
 </div>
 

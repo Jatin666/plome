@@ -25,8 +25,8 @@
         <!-- Bouton d'importation -->
         <div class="row" style="display: flex; justify-content: start;">
           <div class="col-md-2">
-            <button class="btn btn-success mt-1 text-white" data-toggle="modal"
-              data-target="#addDoisserLeadModal">Ajouter un Dossier</button>
+            <button class="btn mt-1 text-white" data-toggle="modal"
+              data-target="#addDoisserLeadModal" style="background-color: rgba(54,188,175,1);">Ajouter un Dossier</button>
           </div>
           <div class="col-md-5 mt-1">
             <form method="post" enctype="multipart/form-data" action="{% url 'import_doisser_leads' %}">
@@ -52,7 +52,7 @@
                 </script>
                 
                 <div class="input-group-append ml-1">
-                  <button type="submit" class="btn btn-primary">Importer</button>
+                  <button type="submit" class="btn text-white" style="background-color: rgba(54,188,175,1);">Importer</button>
                 </div>
               </div>
             </form>
@@ -65,7 +65,7 @@
 
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">History Entries</h5>
+                <h5 class="modal-title">Entrées dans l'histoire</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -75,7 +75,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="closeHistoryModel"
-                  data-dismiss="modal">Close</button>
+                  data-dismiss="modal">Fermer</button>
               </div>
             </div>
           </div>
@@ -88,7 +88,7 @@
           <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="addDoisserLeadModalLabel">Add Doisser Lead</h5>
+                <h5 class="modal-title" id="addDoisserLeadModalLabel">Ajouter un dossier</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -190,8 +190,7 @@
                       <div class="custom-control custom-checkbox custom-control-inline">
                         <input type="checkbox" name="inscription_visio_entree_audio" class="custom-control-input"
                           id="customCheck1">
-                        <label class="custom-control-label custom-checkbox-label" for="customCheck1">Check this
-                          box</label>
+                        <label class="custom-control-label custom-checkbox-label" for="customCheck1">Cochez cette boîte</label>
                       </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -222,8 +221,7 @@
                       <div class="custom-control custom-checkbox custom-control-inline">
                         <input type="checkbox" name="inscription_visio_entree_facture" class="custom-control-input"
                           id="customCheck2">
-                        <label class="custom-control-label custom-checkbox-label" for="customCheck2">Check this
-                          box</label>
+                        <label class="custom-control-label custom-checkbox-label" for="customCheck2">Cochez cette boîte</label>
                       </div>
                     </div>
                     <div class="col-md-6 mb-3">
@@ -255,7 +253,7 @@
                     </div>
                     <!-- Custom Fields (Handle JSONField as needed) -->
                   </div>
-                  <button class="btn btn-primary" type="submit">Submit</button>
+                  <button class="btn btn-primary" type="submit">Envoyer</button>
                 </form>
               </div>
             </div>
@@ -380,7 +378,7 @@
             <div class="modal-dialog modal-xl" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="defaultModalLabel">Modal title</h5>
+                  <h5 class="modal-title" id="defaultModalLabel">Modifier un dossier</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">×</span>
                   </button>
@@ -669,8 +667,6 @@
                                 <h3>Documents disponibles :</h3>
                                 <ul>
                                   <li><a href="#">Document 1</a></li>
-                                  <li><a href="#">Document 2</a></li>
-                                  <li><a href="#">Document 3</a></li>
                                 </ul>
                                 <p>Pour accéder à un document, cliquez sur le lien correspondant.</p>
                               </div>
@@ -686,8 +682,8 @@
 
 
                     <div class="modal-footer">
-                      <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Close</button>
-                      <button type="submit" class="btn mb-2 btn-primary">Save changes</button>
+                      <button type="button" class="btn mb-2 btn-secondary" data-dismiss="modal">Fermer</button>
+                      <button type="submit" class="btn mb-2 text-white" style="background-color: rgba(54,188,175,1);">Sauvegarder</button>
                     </div>
 
                   </form>

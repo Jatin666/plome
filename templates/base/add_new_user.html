@@ -44,12 +44,12 @@
                 <div class="row justify-content-center">
                     <div class="col-12">
                         {% for fu in filtered_user %}
-                        <h1 class="greeting">Hello {{fu}} ✌</h1>
+                        <h1 class="greeting">Bonjour {{fu}} ✌</h1>
                         {% endfor %}
-                        <h2 class="mb-2 page-title">Users table</h2>
+                        <h2 class="mb-2 page-title">Tableau des Utilisateurs</h2>
                         <p class="card-text">
                             <button type="button" class="btn mb-2 btn-outline-success btn-lg" data-toggle="modal"
-                                data-target=".bd-example-modal-lg">Add New User</button>
+                                data-target=".bd-example-modal-lg">Ajouter un utilisateur</button>
                         </p>
                     </div>
                 </div>
@@ -58,7 +58,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="userModalLabel">Add New User</h5>
+                            <h5 class="modal-title" id="userModalLabel">Ajouter un Nouvel Utilisateur</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -68,13 +68,13 @@
                                 action="{% url 'save_user' %}">
                                 {% csrf_token %}
                                 <div class="mx-auto text-center">
-                                    <h2 class="m-3">Add New User</h2>
+                                    <h2 class="m-3">Ajouter un Utilisateur</h2>
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
                                         <!-- <label for="Username">Username</label> -->
                                         <input type="Username" name="Username" id="Username" class="form-control"
-                                            placeholder="User Name" required autocomplete="off">
+                                            placeholder="Nom d'utilisateur" required autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <!-- <label for="Email">Email</label> -->
@@ -84,28 +84,28 @@
                                     <div class="form-group col-md-6">
                                         <!-- <label for="firstname">Firstname</label> -->
                                         <input type="text" name="firstname" id="firstname" class="form-control"
-                                            placeholder="First Name" required autocomplete="off">
+                                            placeholder="Prénom" required autocomplete="off">
                                     </div>
                                     <div class="form-group col-md-6">
                                         <!-- <label for="lastname">Lastname</label> -->
                                         <input type="text" name="lastname" id="lastname" class="form-control"
-                                            placeholder="Last Name" required autocomplete="off">
+                                            placeholder="Nom de famille" required autocomplete="off">
                                     </div>
                                     <!--  -->
                                     <div class="form-group col-md-12">
                                         <div class="row">
-                                            <label class="col-md-2 pt-0">User Profiles</label>
-                                            <div class="col-md-10">
+                                            <label class="col-md-3 pt-0">Profils d'utilisateur</label>
+                                            <div class="col-md-9">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="user_type"
                                                         id="user_type_advisor" value="Advisor" required>
                                                     <label class="form-check-label"
-                                                        for="user_type_advisor">Advisor</label>
+                                                        for="user_type_advisor">Conseiller</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="user_type"
                                                         id="user_type_sales" value="Sales" required>
-                                                    <label class="form-check-label" for="user_type_sales">Sales</label>
+                                                    <label class="form-check-label" for="user_type_sales">Vente</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="user_type"
@@ -119,18 +119,18 @@
                                     <div class="form-group col-md-6">
                                         <!-- <label for="password">New Password</label> -->
                                         <input type="password" name="password" class="form-control" id="password"
-                                            placeholder="Password" required>
+                                            placeholder="Mot de passe" required>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <!-- <label for="confirm_password">Confirm Password</label> -->
                                         <input type="password" name="confirm_password" class="form-control"
-                                            id="confirm_password" placeholder="Confirm Password" required>
+                                            id="confirm_password" placeholder="Confirmer le mot de passe" required>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn mb-2 btn-secondary"
-                                        data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn mb-2 btn-success">Add New User</button>
+                                        data-dismiss="modal">Fermer</button>
+                                    <button type="submit" class="btn mb-2 btn-success">Ajouter un Nouvel</button>
                                 </div>
                                 <!-- <p class="mt-5 mb-3 text-muted text-center">© 2020</p> -->
                             </form>
@@ -191,16 +191,20 @@
             <div class="card-body">
                 <!-- Table -->
                 <table class="table datatables" id="dataTable-1">
-                    <thead>
+                    <thead class="thead-dark">
                         <tr>
-                            <th></th>
-                            <th class="table-header">Sl No.</th>
-                            <th class="table-header">First Name</th>
-                            <th class="table-header">Last Name</th>
-                            <th class="table-header">User Name</th>
+                            <th><div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" />
+                                <label class="custom-control-label"></label>
+                            </div>
+                            </th>
+                            <th class="table-header">N°Sl.</th>
+                            <th class="table-header">Prénom</th>
+                            <th class="table-header">Nom de famille</th>
+                            <th class="table-header">Nom de l'utilisateur</th>
                             <th class="table-header">Email</th>
-                            <th class="table-header">Address</th>
-                            <th class="table-header">Date Joined</th>
+                            <th class="table-header">Adresse</th>
+                            <th class="table-header">Date d'adhésion</th>
                             <th class="table-header">Action</th>
                         </tr>
                     </thead>
@@ -254,16 +258,16 @@
                                                         {% endcomment %} -->
                                                         <a class="dropdown-item" href="javascript:void(0)"
                                                             onclick="sendEmail('{{ vau.id }}')"
-                                                            id="send-mail-{{ vau.id }}">Invite</a>
+                                                            id="send-mail-{{ vau.id }}">Inviter</a>
                                                         <a class="dropdown-item" href="javascript:void(0)"
                                                             data-toggle="modal"
-                                                            data-target="#editModal-{{ vau.id }}">Edit</a>
+                                                            data-target="#editModal-{{ vau.id }}">Modifier</a>
 
                                                         <a class="dropdown-item" href="javascript:void(0)"
                                                         onclick="toggleUserActivation('{{ vau.id }}', {{ vau.is_active|yesno:"true,false" }}, '{% url 'toggle_user' vau.id %}')"
                                                         id="user-action-{{ vau.id }}"
                                                         data-url="{% if vau.is_active %}{% url 'deactivate-user' vau.id %}{% else %}{% url 'activate-user' vau.id %}{% endif %}">
-                                                        {% if vau.is_active %}Deactivate{% else %}Activate{% endif %}
+                                                        {% if vau.is_active %}Désactiver{% else %}Activer{% endif %}
                                                     </a>
                                                     <script>
                                                         function toggleUserActivation(userId, isActive, url) {
@@ -340,7 +344,7 @@
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="editModalLabel">Edit User
+                                                                <h5 class="modal-title" id="editModalLabel">Modifier l'utilisateur
                                                                 </h5>
                                                                 <button type="button" class="close" data-dismiss="modal"
                                                                     aria-label="Close">
@@ -382,8 +386,8 @@
                                                                         </div>
                                                                         <div class="form-group col-md-12">
                                                                             <div class="row">
-                                                                                <label class="col-md-2 pt-0">User Profiles</label>
-                                                                                <div class="col-md-10">
+                                                                                <label class="col-md-3 pt-0">Profils d'utilisateur                                                                                </label>
+                                                                                <div class="col-md-9">
                                                                                     <div
                                                                                         class="form-check form-check-inline">
                                                                                         <input class="form-check-input"
@@ -394,7 +398,7 @@
                                                                                             {% if vau.is_advisor %}checked{% endif %}
                                                                                             required>
                                                                                         <label class="form-check-label"
-                                                                                            for="user_type_advisor">Advisor</label>
+                                                                                            for="user_type_advisor">Conseiller</label>
                                                                                     </div>
                                                                                     <div
                                                                                         class="form-check form-check-inline">
@@ -406,7 +410,7 @@
                                                                                             {% if vau.is_sales %}checked{% endif %}
                                                                                             required>
                                                                                         <label class="form-check-label"
-                                                                                            for="user_type_sales">Sales</label>
+                                                                                            for="user_type_sales">Vente</label>
                                                                                     </div>
                                                                                     <div
                                                                                         class="form-check form-check-inline">
@@ -440,9 +444,9 @@
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <button type="button" class="btn btn-secondary"
-                                                                    data-dismiss="modal">Close</button>
+                                                                    data-dismiss="modal">Fermer</button>
                                                                 <button type="button" class="btn btn-primary"
-                                                                    onclick="updateUser('{{ vau.id }}')">Save</button>
+                                                                    onclick="updateUser('{{ vau.id }}')">Sauvegarder</button>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -505,7 +509,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">
-                        Clear All
+                        Tout effacer
                     </button>
                 </div>
             </div>

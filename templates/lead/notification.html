@@ -25,27 +25,27 @@
                         <label class="custom-control-label" for="all2"></label>
                       </div>
                     </th>
-                    <th>Sender</th>
-                      <th>Date and Time</th>
-                      <th>Message</th>
-                      <th>Is Read</th>
+                    <th>Expéditeur</th>
+                    <th>Date et Heure</th>
+                    <th>Message</th>
+                    <th>Lu</th>
                   </tr>
                 </thead>
                 <tbody>
                   {% for notification in notifications %}
-                  <tr onclick="openNotificationModal('{{ notification.id }}', '{{ notification.lead.id }}')">
-                    <td>
-                      <div class="custom-control custom-checkbox">
-                        <input type="checkbox" class="custom-control-input" id="{{ notification.id }}">
-                        <label class="custom-control-label" for="{{ notification.id }}"></label>
-                      </div>
-                    </td>
-                    <td>{{ notification.lead.assigned_to }}</td>
-                    <td>{{ notification.timestamp }}</td>
-                    <td>{{ notification.message }}</td>
-                    <td>{% if notification.is_read %}Yes{% else %}No{% endif %}</td>
-                  </tr>
-                  {% endfor %}
+              <tr onclick="openNotificationModal('{{ notification.id }}', '{{ notification.lead.id }}')">
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{ notification.id }}">
+                    <label class="custom-control-label" for="{{ notification.id }}"></label>
+                  </div>
+                </td>
+                <td>{{ notification.lead.assigned_to }}</td>
+                <td>{{ notification.timestamp }}</td>
+                <td>{{ notification.message }}</td>
+                <td>{% if notification.is_read %}Oui{% else %}Non{% endif %}</td>
+              </tr>
+              {% endfor %}
                 </tbody>
                 
               </table>

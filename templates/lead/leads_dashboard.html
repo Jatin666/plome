@@ -114,7 +114,7 @@
   <div class="container-fluid">
     <div class="container-fluid">
       {% if messages %}
-      <div class="container mt-3">
+      <div class="container mt-1">
         {% for message in messages %}
         <div class="alert alert-{{ message.tags }}" role="alert">
           {{ message }}
@@ -249,14 +249,14 @@
         }
     </script>
 
-    <div class="container">
+    <div class="container mt-2">
       <div class="header">
-        <h2 class="page-title">Leads Dashboard</h2>
+        <h2 class="page-title">Tableau de bord prospects</h2>
         <div class="button ">
-          <button class="btn add-button" data-toggle="modal" data-target="#defaultModal">Add Lead</button>
-          <button class="btn import-button ml-2" data-toggle="modal" data-target="#importModal">Import</button>
-          <a href="{% url 'export_leads' 'csv' %}" class="btn export-button ml-2">Export CSV</a>
-          <a href="{% url 'export_leads' 'xlsx' %}" class="btn export-button ml-2">Export XLSX</a>
+          <button class="btn add-button" data-toggle="modal" data-target="#defaultModal" style="background-color: #36BCAF;">Ajouter un lead</button>
+          <button class="btn import-button ml-2" data-toggle="modal" data-target="#importModal">Importer</button>
+          <a href="{% url 'export_leads' 'csv' %}" class="btn export-button ml-2">Exporter CSV</a>
+          <a href="{% url 'export_leads' 'xlsx' %}" class="btn export-button ml-2">Exporter XLSX</a>
         </div>
       </div>
     
@@ -320,7 +320,7 @@
     
       <div class="form-inline">
         <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
-          <label for="assignToUser" class="text-white ml-2 mr-2">Assign to :</label>
+          <label for="assignToUser" class="text-white ml-2 mr-2">Affecter à :</label>
           <select name="" id="assignToUser" class="form-control">
             <option value="">Choisir un utilisateur</option>
             {% for user in users %}
@@ -334,7 +334,7 @@
           <form method="post" action="{% url 'save_facebook_form_ids' %}">
             {% csrf_token %}
             <div class="form-control">
-              Form ID's:
+              ID du formulaire :
             </div>
             <input type="submit" name="save_facebook_form_ids" value="Save" class="btn text-white" style="background-color: #36BCAF; border-radius: 5px;">
           </form>
@@ -343,15 +343,15 @@
         <form method="post" action="{% url 'fetch_facebook_leads' %}" class="form-inline">
           {% csrf_token %}
           <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
-            <label for="page_filter" class="text-white ml-2 mr-2">Filter by Facebook Page:</label>
+            <label for="page_filter" class="text-white ml-2 mr-2">Filtrer par page Facebook:</label>
             <select class="form-control" class="form-control" name="page_name" id="page_filter">
-              <option value="">All</option>
+              <option value="">Tous</option>
               {% for name in page_names %}
               <option value="{{ name }}">{{ name }}</option>
               {% endfor %}
             </select>
           </div>
-          <input type="submit" name="fetch_facebook_leads" value="Fetch Leads" class="btn btn-secondary">
+          <input type="submit" name="fetch_facebook_leads" value="Trouver des prospects" class="btn btn-secondary">
         </form>
       </div>
 
@@ -360,10 +360,10 @@
           <form method="post" action="{% url 'update_access_token' %}" class="form-inline">
             {% csrf_token %}
             <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
-            <label for="access_token" class="text-white ml-2 mr-2">Access Token:</label>
+            <label for="access_token" class="text-white ml-2 mr-2">Token d'accès:</label>
             <input type="text" class="form-control" name="access_token" id="access_token">
           </div>
-          <input type="submit" name="update_access_token" value="Update Access Token" class="btn btn-secondary">
+          <input type="submit" name="update_access_token" value="Mise à jour du token d'accès" class="btn btn-secondary">
 
           </form>
        </div>
@@ -386,7 +386,7 @@
             <div class="modal-dialog modal-lg" role="document">
               <div class="modal-content">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="defaultModalLabel">Add lead</h5>
+                  <h5 class="modal-title" id="defaultModalLabel">Ajouter un prospect</h5>
                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                   </button>
@@ -409,27 +409,27 @@
                             {% comment %} <input type="text" class="form-control" id="nom" name="nom" required>
                             {% endcomment %}
                             <input type="text" name="nom_de_la_campagne" class="form-control" maxlength="100" required>
-                            <div class="invalid-feedback">Please provide a valid nom.</div>
+                            <div class="invalid-feedback">Veuillez fournir un nom valide.</div>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label for="avez_vous_travaille">Avez-vous travaillé</label>
                             <input type="text" name="avez_vous_travaille" class="form-control" maxlength="100" required>
-                            <div class="invalid-feedback">Please provide a valid email.</div>
+                            <div class="invalid-feedback">Veuillez fournir un email valide.</div>
                           </div>
                           <div class="col-md-6 mb-3">
                             <label for="telephone">Nom & Prenom</label>
                             <input type="text" name="nom_prenom" class="form-control" maxlength="100" required>
-                            <div class="invalid-feedback">Please provide a valid telephone number.</div>
+                            <div class="invalid-feedback">Veuillez fournir un numéro de téléphone valide.</div>
                           </div>
                           {% comment %} <div class="col-md-6 mb-3">
                             <label for="date_de_soumission">Prénom</label>
                             <input type="text" name="prenom" class="form-control" maxlength="100" required>
-                            <div class="invalid-feedback">Please provide a valid date de soumission.</div>
+                            <div class="invalid-feedback">Veuillez fournir une date de soumission valide.</div>
                           </div> {% endcomment %}
                           <div class="col-md-6 mb-3">
                             <label for="Téléphone">Téléphone</label>
                             <input type="text" name="telephone" class="form-control" maxlength="20" required>
-                            <div class="invalid-feedback">Please provide a valid nom de la campagne.</div>
+                            <div class="invalid-feedback">Veuillez fournir un nom de campagne valide.</div>
                           </div>
                           <div class="form-group col-md-6 mb-3">
                             <label for="qualification">Qualification</label>
@@ -448,7 +448,7 @@
                                 <option value="signe_pole_emploi">Signé Pôle Emploi</option>
                                 <option value="signe_cpf">Signé CPF</option>
                               </select>
-                              <div class="invalid-feedback">Please select a qualification.</div>
+                              <div class="invalid-feedback">Veuillez sélectionner une qualification.</div>
                           </div>
                           <div class="form-group col-md-6 mb-3">
                             <label for="Email">Email</label>
@@ -457,12 +457,12 @@
                           <div class="col-md-6 mb-3">
                             <label for="Comments">Comments</label>
                             <textarea name="comments" class="form-control" required></textarea>
-                            <div class="invalid-feedback">Please provide a valid nom de la campagne.</div>
+                            <div class="invalid-feedback">Veuillez fournir un nom de la campagne valide.</div>
                           </div>
                           <div class="col-md-6 mb-3">
-                            <label for="assigned_to">Assign To</label>
+                            <label for="assigned_to">Assigner à</label>
                             <select name="assigned_to" class="form-control">
-                              <option value="">-- Select User --</option>
+                              <option value="">-- Sélectionner un utilisateur --</option>
                               {% for user in users %}
                               <option value="{{ user.id }}">{{ user.username }}</option>
                               {% endfor %}
@@ -473,7 +473,7 @@
                             
                         
                           <div class="col-md-6 mb-3">
-                            <button class="btn btn-primary" type="submit">Submit</button>
+                            <button class="btn btn-primary" type="submit">Envoyer</button>
                           </div>
                             </div>
 
@@ -495,7 +495,7 @@
           <div class="modal-dialog" role="document">
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title" id="importModalLabel">Import Leads</h5>
+                <h5 class="modal-title" id="importModalLabel">Importer des prospects</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -504,10 +504,10 @@
                 <form method="post" enctype="multipart/form-data" action="{% url 'import_leads' %}">
                   {% csrf_token %}
                   <div class="form-group">
-                    <label for="file">Select CSV or Excel File</label>
+                    <label for="file">Sélectionner un fichier CSV ou Excel</label>
                     <input type="file" name="file" id="file" class="form-control-file" required>
                   </div>
-                  <button type="submit" class="btn btn-primary">Import</button>
+                  <button type="submit" class="btn btn-primary">Importer</button>
                 </form>
               </div>
             </div>
@@ -519,7 +519,7 @@
 
             <div class="modal-content">
               <div class="modal-header">
-                <h5 class="modal-title">History Entries</h5>
+                <h5 class="modal-title">Entrées de l'histoire</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
@@ -529,7 +529,7 @@
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" id="closeHistoryModel"
-                  data-dismiss="modal">Close</button>
+                  data-dismiss="modal">Fermer</button>
               </div>
             </div>
           </div>
@@ -602,14 +602,14 @@
                             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dr4">
                               <a class="dropdown-item" href="{% url 'toggle_lead_status' lead.id %}">
                                 {% if lead.is_active %}
-                                Deactivate
+                                Désactiver
                                 {% else %}
-                                Activate
+                                Activer
                                 {% endif %}
                               </a>
 
                               <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal"
-                                data-target="#editModal-{{ lead.id }}">View</a>
+                                data-target="#editModal-{{ lead.id }}">Voir</a>
 
                             </div>
                           </div>
@@ -620,7 +620,7 @@
                             <div class="modal-dialog modal-xl" role="document">
                               <div class="modal-content">
                                 <div class="modal-header">
-                                  <h5 class="modal-title" id="editModalLabel">Edit Lead
+                                  <h5 class="modal-title" id="editModalLabel">Modifier le prospect
                                   </h5>
                                   <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
@@ -677,7 +677,7 @@
 
                                         <select name="qualification" id="qualification" class="form-control qualification-select" data-lead-id="{{ lead.id }}" required>
                                           <option value="" {% if not lead.select_qualification %}selected{% endif %}>
-                                            --Select Qualification--</option>
+                                            --Sélectionnez une qualification--</option>
                                           <option value="nrp1" {% if lead.qualification == 'nrp1' %} selected
                                             {% endif %}>
                                             NRP1
@@ -711,14 +711,14 @@
                                         </select>
                                       </div>
                                       <div class="form-group col-md-6">
-                                        <label for="comments">Comments</label>
+                                        <label for="comments">Commentaires</label>
                                         <textarea name="comments" id="comments" class="form-control"
                                           required>{{ lead.comments }}</textarea>
                                       </div>
                                       <div class="form-group col-md-6">
-                                        <label for="assigned_to">Assign To</label>
+                                        <label for="assigned_to">Assigner à</label>
                                         <select name="assigned_to" id="assigned_to" class="form-control" required>
-                                          <option value="">-- Select User --</option>
+                                          <option value="">-- Sélectionner un utilisateur --</option>
                                           {% for user in users %}
                                           <option value="{{ user.id }}"
                                             {% if user.id == lead.assigned_to.id %}selected{% endif %}>
@@ -730,16 +730,16 @@
                                       </div>
                                       
                                       <div class="form-group col-md-6" id="rappelappointment{{ lead.id }}" {% if lead.qualification == 'rappel' %} style="display:block;" {% else %} style="display:none;" {% endif %}>
-                                        <label for="appointment">Appointment Date & Time</label>
+                                        <label for="appointment">Date et heure du rendez-vous</label>
                                         <div class="input-group mb-3">
                                           <input type="text" class="form-control" name="appointmentStatDateTime" id="appointmentStatDateTime{{ lead.id }}" placeholder="Click Schedule" aria-label="Click Schedule" readonly  value="{{ lead.appointment_date_time }}" aria-describedby="button-addon2">
                                           <div class="input-group-append">
-                                            <button class="btn btn-primary clicktoschedule" data-lead-id="{{ lead.id }}" type="button" id="button-addon2">Schedule New</button>
+                                            <button class="btn btn-primary clicktoschedule" data-lead-id="{{ lead.id }}" type="button" id="button-addon2">Calendrier Nouveau</button>
                                           </div>
                                         </div>
                                       </div>
                                       <div class="form-group col-md-6" id="signecpfprice{{ lead.id }}" {% if lead.qualification == 'signe_cpf' %} style="display:block;" {% else %} style="display:none;" {% endif %}>
-                                        <label for="price">Price</label>
+                                        <label for="price">Prix</label>
                                           <input type="text" name="price" id="priceStat{{ lead.id }}" class="form-control"
                                             placeholder="Price" value="{{ lead.price }}" required autocomplete="off">
                                           <!-- Add a dropdown for selecting the company -->
@@ -747,9 +747,9 @@
                                         <form method="post" action="{% url 'lead_edit' lead.id %}">
                                           {% csrf_token %}
                                           <div class="form-group">
-                                            <label for="company_id">Select Company:</label>
+                                            <label for="company_id">Sélectionnez une entreprise:</label>
                                             <select name="company_id" id="company_id" class="form-control">
-                                              <option value="" disabled>Select a company</option>
+                                              <option value="" disabled>Sélectionnez une entreprise</option>
                                               {% for company in companies %}
                                               {% if company.id == lead.company.id %}
                                               <option value="{{ company.id }}" selected>{{ company.name }}</option>
@@ -800,7 +800,7 @@
                                           </li>
                                           <li class="nav-item">
                                             <a class="nav-link  show-otherhistory-btn" data-lead-id="{{ lead.id }}" data-toggle="tab"
-                                              href="#history{{ lead.id }}" data-url="{% url 'lead_otherhistory' lead.id %}">History</a>
+                                              href="#history{{ lead.id }}" data-url="{% url 'lead_otherhistory' lead.id %}">Historique</a>
                                           </li>
                                           <li class="nav-item">
                                             <a class="nav-link  show-history-btn" data-toggle="tab"
@@ -832,10 +832,10 @@
                                                       <thead class="thead-dark">
                                                         <tr>
                                                           <th>Timestamp</th>
-                                                          <th>User</th>
-                                                          <th>Previous To</th>
-                                                          <th>Assigned To</th>
-                                                          <th>Changes</th>
+                                                          <th>Utilisateur</th>
+                                                          <th>Précédent à</th>
+                                                          <th>Assigné à</th>
+                                                          <th>Changements</th>
                                                         </tr>
                                                       </thead>
                                                       <tbody>
@@ -886,9 +886,9 @@
                                                         <thead class="fw-bold">
                                                           <tr>
                                                             <th>ID</th>
-                                                            <th>User</th>
-                                                            <th>Action Time</th>
-                                                            <th>Action Made</th>
+                                                            <th>Utilisateur</th>
+                                                            <th>Temps d'action</th>
+                                                            <th>Action effectuée</th>
                                                           </tr>
                                                         </thead>
                                                         <tbody>
@@ -923,14 +923,14 @@
                                                     action="{% url 'attach_file_to_lead' lead_id=lead.id %}">
                                                     {% csrf_token %}
                                                     <div>
-                                                      <label for="attachment">Attachment:</label>
+                                                      <label for="attachment">Pièce jointe:</label>
                                                       <input type="file" name="attachment" id="attachment">
                                                     </div>
                                                     <div>
-                                                      <label for="title">Title:</label>
+                                                      <label for="title">Titre:</label>
                                                       <input type="text" name="title" id="title">
                                                     </div>
-                                                    <button type="submit">Attach File</button>
+                                                    <button type="submit">Joindre un fichier</button>
                                                   </form>
 
                                                 </blockquote>
@@ -951,7 +951,7 @@
                                                       {{ attachment.title }}
                                                     </a>
                                                     <button class="btn btn-sm btn-danger ml-2"
-                                                      onclick="confirmDelete({{ attachment.id }})">Delete</button>
+                                                      onclick="confirmDelete({{ attachment.id }})">Supprimer</button>
                                                   </li>
                                                   {% endfor %}
                                                 </ul>
@@ -1002,9 +1002,9 @@
                                   <!-- Your form fields -->
                                   
                                   <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
                                     <button type="button" class="btn btn-primary"
-                                      onclick="updateLead('{{ lead.id }}')">Save</button>
+                                      onclick="updateLead('{{ lead.id }}')">Sauvegarder</button>
 
                                   </div>
 
@@ -1054,7 +1054,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="defaultModalLabel">Shortcuts</h5>
+          <h5 class="modal-title" id="defaultModalLabel">Raccourcis</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
