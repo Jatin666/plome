@@ -190,88 +190,88 @@
 
         </div> <!-- end section -->
 
-<!-- Inside your HTML template -->
-<div class="container mt-2">
-  <h2>Résumé du chef d'entreprise</h2>
-  <table id="company-lead-summary-table" class="display" style="width:100%">
-    <thead>
-      <tr>
-        <th>Entreprise</th>
-        <th>Décompte des prospects</th>
-        <th>Prix total</th>
-      </tr>
-    </thead>
-  </table>
-</div>
+      <!-- Inside your HTML template -->
+      <div class="container mt-2">
+        <h2>Résumé du chef d'entreprise</h2>
+        <table id="company-lead-summary-table" class="display" style="width:100%">
+          <thead>
+            <tr>
+              <th>Entreprise</th>
+              <th>Décompte des prospects</th>
+              <th>Prix total</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
 
 
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
 
-<script>
-  $(document).ready(function () {
-    // Fetch JSON data from your Django view
-    $.getJSON("{% url 'company_lead_summary' %}", function (data) {
-      // Initialize the DataTable
-      $('#company-lead-summary-table').DataTable({
-        data: data.company_summaries,
-        columns: [
-          { data: 'company_name' },
-          { data: 'lead_count' },
-          { data: 'total_price' },
-        ]
+    <script>
+      $(document).ready(function () {
+        // Fetch JSON data from your Django view
+        $.getJSON("{% url 'company_lead_summary' %}", function (data) {
+          // Initialize the DataTable
+          $('#company-lead-summary-table').DataTable({
+            data: data.company_summaries,
+            columns: [
+              { data: 'company_name' },
+              { data: 'lead_count' },
+              { data: 'total_price' },
+            ]
+          });
+        });
       });
-    });
-  });
-</script>
+    </script>
         
-  <div class="row">
-  <!-- Price Table Section -->
-  <div class="col-md-12">
-    <div class="card shadow price-table-card">
-      <div class="card-body d-flex flex-column align-items-center">
-        <div class="d-flex justify-content-between align-items-center mb-3 w-100">
-          <div>
-            <button type="button" class="btn week-button" id="prevWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine précédente</span></button>
+    <div class="row">
+    <!-- Price Table Section -->
+    <div class="col-md-12">
+      <div class="card shadow price-table-card">
+        <div class="card-body d-flex flex-column align-items-center">
+          <div class="d-flex justify-content-between align-items-center mb-3 w-100">
+            <div>
+              <button type="button" class="btn week-button" id="prevWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine précédente</span></button>
+            
+              <button type="button" class="btn week-button ml-2" id="nextWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine prochaine</span></button>
           
-            <button type="button" class="btn week-button ml-2" id="nextWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine prochaine</span></button>
-         
+            </div>
+            
+            <h4 class="text-center">Tableau des prix</h4>
+            <div>
+              <button type="button" class="btn week-button" id="presentWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine en cours</span></button>
+            </div>
           </div>
-          
-          <h4 class="text-center">Tableau des prix</h4>
-          <div>
-            <button type="button" class="btn week-button" id="presentWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine en cours</span></button>
-          </div>
-        </div>
-        <h6 id="table-heading" class="text-center mb-3"></h6>
-        <div class="table-container">
-          <div id="priceTable_wrapper" class="table-responsive">
-            <table id="priceTable" class="table table-striped table-bordered elegant-table">
-              <thead class="thead-dark">
-                <tr role="row">
-                  <th>Utilisateur</th>
-                  <th>Lundi</th>
-                  <th>Mardi</th>
-                  <th>Mercredi</th>
-                  <th>Jeudi</th>
-                  <th>Vendredi</th>
-                  <th>Samedi</th>
-                  <th>Dimanche</th>
-                  <th>Total de la semaine</th>
-                  <th>Mois Total</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Data will be populated here -->
-              </tbody>
-            </table>
+          <h6 id="table-heading" class="text-center mb-3"></h6>
+          <div class="table-container">
+            <div id="priceTable_wrapper" class="table-responsive">
+              <table id="priceTable" class="table table-striped table-bordered elegant-table">
+                <thead class="thead-dark">
+                  <tr role="row">
+                    <th>Utilisateur</th>
+                    <th>Lundi</th>
+                    <th>Mardi</th>
+                    <th>Mercredi</th>
+                    <th>Jeudi</th>
+                    <th>Vendredi</th>
+                    <th>Samedi</th>
+                    <th>Dimanche</th>
+                    <th>Total de la semaine</th>
+                    <th>Mois Total</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Data will be populated here -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-  </div> <!-- .col-md-12 -->
-</div>
+    </div> <!-- .col-md-12 -->
+  </div>
 
 
 
