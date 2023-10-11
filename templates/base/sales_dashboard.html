@@ -117,7 +117,7 @@
 
    <div id="ticker">
     <marquee behavior="scroll" direction="left" scrollamount="5">
-      <span id="ticker-content">Welcome to plome {{user.first_name}}</span>
+      <span id="ticker-content">Bienvenue à plome {{user.first_name}}</span>
     </marquee>
   </div>
 <main role="main" class="main-content">
@@ -125,20 +125,20 @@
     <div class="row justify-content-center">
        
       <div class="col-12">
-        <h1>Hello ✌ {{ user.first_name }}</h1>
+        <h1>Bonjour ✌ {{ user.first_name }}</h1>
         <div class="row">
           <div class="col-md-6 col-xl-3 mb-4">
-            <div class="card shadow bg-primary text-white border-0">
+            <div class="card shadow text-white border-0" style="background-color: rgba(54,188,175,1);">
               <div class="card-body">
                 <div class="row align-items-center">
                   <div class="col-3 text-center">
-                    <span class="circle circle-sm bg-primary-light">
+                    <span class="circle circle-sm"  style="background-color: rgb(2, 130, 124);">
                       <i class="fe fe-16 fe-shopping-bag text-white mb-0"></i>
                     </span>
                   </div>
 
                   <div class="col pr-0">
-                    <p class="small text-muted mb-0">Number of leads assigned</p>
+                    <p class="small text-white mb-0">Nombre de leads attribués</p>
                     <span class="h3 mb-0 text-white">{{ assigned_leads_count }}</span>
                     <!-- Add other relevant styling and content -->
                   </div>
@@ -153,12 +153,12 @@
               <div class="card-body">
                 <div class="row align-items-center">
                   <div class="col-3 text-center">
-                    <span class="circle circle-sm bg-primary">
+                    <span class="circle circle-sm" style="background-color: rgba(54,188,175,1);">
                       <i class="fe fe-16 fe-shopping-cart text-white mb-0"></i>
                     </span>
                   </div>
                   <div class="col pr-0">
-                    <p class="small text-muted mb-0">Number of Signé CPF</p>
+                    <p class="small text-black mb-0">Nombre de CPF Signé</p>
                     {% if not request.user.is_superuser %}
                     <span class="h3 mb-0">{{ signe_cpf_leads_count }}</span>
 
@@ -176,12 +176,12 @@
               <div class="card-body">
                 <div class="row align-items-center">
                   <div class="col-3 text-center">
-                    <span class="circle circle-sm bg-primary">
+                    <span class="circle circle-sm" style="background-color: rgba(54,188,175,1);">
                       <i class="fe fe-16 fe-filter text-white mb-0"></i>
                     </span>
                   </div>
                   <div class="col">
-                    <p class="small text-muted mb-0">Conversion</p>
+                    <p class="small text-black mb-0">Conversion</p>
                     <div class="row align-items-center no-gutters">
                       <div class="col-auto">
                         <span class="h3 mr-2 mb-0">{{ conversion_rate|floatformat:1 }}%</span>
@@ -199,23 +199,23 @@
               </div>
             </div>
           </div>
-                    <div class="col-md-6 col-xl-3 mb-4">
-    <div class="card shadow border-0">
-        <div class="card-body">
-            <div class="row align-items-center">
-                <div class="col-3 text-center">
-                    <span class="circle circle-sm bg-primary">
-                        <i class="fe fe-16 fe-activity text-white mb-0"></i>
+          <div class="col-md-6 col-xl-3 mb-4">
+            <div class="card shadow border-0">
+              <div class="card-body">
+                <div class="row align-items-center">
+                  <div class="col-3 text-center">
+                    <span class="circle circle-sm" style="background-color: rgba(54,188,175,1);">
+                      <i class="fe fe-16 fe-activity text-white mb-0"></i>
                     </span>
-                </div>
-                <div class="col">
+                  </div>
+                  <div class="col">
                     <p class="small text-muted mb-0">Notifications</p>
                     <span class="h3 mb-0">{{ unread_notification_count|default:"0" }}</span>
+                  </div>
                 </div>
+              </div>
             </div>
-        </div>
-    </div>
-</div>
+          </div>
         </div> <!-- end section -->
             <div class="row">
   <!-- Price Table Section -->
@@ -224,14 +224,14 @@
       <div class="card-body d-flex flex-column align-items-center">
         <div class="d-flex justify-content-between align-items-center mb-3 w-100">
           <div>
-            <button type="button" class="btn btn-secondary week-button" id="prevWeek">Previous Week</button>
+            <button type="button" class="btn week-button mr-2" id="prevWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine précédente</span></button>
           
-            <button type="button" class="btn btn-secondary week-button" id="nextWeek">Next Week</button>
+            <button type="button" class="btn week-button" id="nextWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine prochaine</span></button>
           </div>
           
-          <h4 class="text-center">Price Table</h4>
+          <h4 class="text-center">Tableau des prix</h4>
           <div>
-            <button type="button" class="btn btn-secondary week-button" id="presentWeek">Present Week</button>
+            <button type="button" class="btn week-button" id="presentWeek" style="background-color: rgba(54,188,175,1);"><span class="text-white">Semaine en cours</span></button>
           </div>
         </div>
         <h6 id="table-heading" class="text-center mb-3"></h6>
