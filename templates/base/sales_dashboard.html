@@ -240,16 +240,16 @@
             <table id="priceTable" class="table table-striped table-bordered elegant-table">
               <thead class="thead-dark">
                 <tr role="row">
-                 <th>User</th>
-                  <th>Monday</th>
-                  <th>Tuesday</th>
-                  <th>Wednesday</th>
-                  <th>Thursday</th>
-                  <th>Friday</th>
-                  <th>Saturday</th>
-                  <th>Sunday</th>
-                  <th>Week Total</th>
-                  <th>Month Total</th>
+                 <th>Utilisateur</th>
+                  <th>Lundi</th>
+                  <th>Mardi</th>
+                  <th>Mercredi</th>
+                  <th>Jeudi</th>
+                  <th>Vendredi</th>
+                  <th>Samedi</th>
+                  <th>Dimanche</th>
+                  <th>Total semaine</th>
+                  <th>Total Mois</th>
                 </tr>
               </thead>
               <tbody>
@@ -274,7 +274,7 @@
 <script src="https://cdn.datatables.net/select/1.3.1/js/dataTables.select.min.js"></script>
 <script>
   var selectedWeek = 0; // Initialize the selected week offset
-  var weekdays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var weekdays = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'];
 
   function updateTable(data) {
     var tableBody = $('#priceTable tbody');
@@ -342,9 +342,9 @@
     var startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate() - (today.getDay() + 7 * weekOffset));
     var endDate = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate() + 6);
 
-    var monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    var monthNames = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet', 'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre'];
     var month = monthNames[startDate.getMonth()];
-    var week = weekOffset === 0 ? 'Present Week' : 'Week ' + (weekOffset > 0 ? weekOffset : 'Previous');
+    var week = weekOffset === 0 ? 'Semaine Actuelle' : 'Semaine ' + (weekOffset > 0 ? weekOffset : 'Précédente');
 
     $('#table-heading').text(month + ' | ' + week + ' (' + startDate.toDateString() + ' - ' + endDate.toDateString() + ')');
   }
