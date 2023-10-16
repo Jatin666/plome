@@ -246,7 +246,22 @@
   <script src="{%static 'js/config.js'%}"></script>
   <script src="{%static 'js/apps.js'%}"></script>
   
-
+  <script>
+    $(document).ready(function () {
+        $(".close").click(function () {
+            // Fermer le modal en utilisant le data-dismiss attribut
+            $(".modal").modal("hide");
+        });
+    });
+    
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#fermerPopup").click(function () {
+        $(".modal").modal("hide");
+      });
+    });
+  </script>
   <!-- datatable script -->
   {% block javascript %}
 

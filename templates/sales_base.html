@@ -207,22 +207,22 @@
   <script src="{%static 'js/apps.js'%}"></script>
   
   <!-- je pour fermer le popup de la notification-->
- <script>
-  $(document).ready(function () {
-      $(".close").click(function () {
-          // Fermer le modal en utilisant le data-dismiss attribut
-          $(".modal").modal("hide");
-      });
-  });
-  
-</script>
-<script>
-  $(document).ready(function () {
-    $("#fermerPopup").click(function () {
-      $(".modal").modal("hide");
+  <script>
+    $(document).ready(function () {
+        $(".close").click(function () {
+            // Fermer le modal en utilisant le data-dismiss attribut
+            $(".modal").modal("hide");
+        });
     });
-  });
-</script>
+    
+  </script>
+  <script>
+    $(document).ready(function () {
+      $("#fermerPopup").click(function () {
+        $(".modal").modal("hide");
+      });
+    });
+  </script>
 
   <!-- datatable script -->
   {% block javascript %}
