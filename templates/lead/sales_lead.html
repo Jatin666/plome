@@ -51,15 +51,15 @@
       margin-bottom: 20px;
     }
     .filter.sales-filter select {
-      appearance: none;
+      appearance: auto;
       padding: 10px 15px;
       border: none;
-      border-radius: 5px;
+      border-radius: 3px;
       background-color: #f0f0f0;
       color: #333;
       font-size: 14px;
       transition: background-color 0.3s;
-      width: 200px; /* Set width of dropdown */
+      width: 226px; /* Set width of dropdown */
     }
     .filter.sales-filter select:focus {
       outline: none;
@@ -307,7 +307,7 @@
   <form method="GET" action="{% url 'sales_lead' %}" class="filter-form sales-filter">
     <div class="filter sales-filter" style="background-color: #313131; border-radius: 5px;">
       <label for="qualification_filter" class="text-white ml-2 mr-2">Filtrer par qualification :</label>
-      <select name="qualification" id="qualification_filter">
+      <select name="qualification" id="qualification_filter" >
         <option value="">-- Choisir une qualification --</option>
         <option value="nrp1">NRP1</option>
         <option value="nrp2">NRP2</option>
@@ -322,7 +322,7 @@
         <option value="signe_cpf">Signé CPF</option>
       </select>
     </div>
-    <button type="submit" class="btn" style="background-color: rgba(54,188,175,1);">Appliquer les filtres</button>
+    <button type="submit" class="btn text-white" style="background-color: rgba(54,188,175,1);">Appliquer les filtres</button>
   </form>
 
 
@@ -536,7 +536,7 @@ $(document).ready(function() {
                 <!-- table -->
                 <div class="table-responsive">
                   <table id="exampleDT" class="table table-bordered display nowrap" cellspacing="0" style="width:100%">
-                    <thead class="fw-bold">
+                    <thead class="table-dark">
                       <tr>
                         <th><input type="checkbox" id="selectAllCheckbox"></th>
                         <th data-toggle="select" data-lead-id="lead_id">Date de Soumission</th>
