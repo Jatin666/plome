@@ -305,8 +305,8 @@
   <br>
 
   <form method="GET" action="{% url 'sales_lead' %}" class="filter-form sales-filter">
-    <div class="filter sales-filter">
-      <label for="qualification_filter">Filtrer par qualification :</label>
+    <div class="filter sales-filter" style="background-color: #313131; border-radius: 5px;">
+      <label for="qualification_filter" class="text-white ml-2 mr-2">Filtrer par qualification :</label>
       <select name="qualification" id="qualification_filter">
         <option value="">-- Choisir une qualification --</option>
         <option value="nrp1">NRP1</option>
@@ -322,7 +322,7 @@
         <option value="signe_cpf">Signé CPF</option>
       </select>
     </div>
-    <button type="submit" class="btn apply-button">Appliquer les filtres</button>
+    <button type="submit" class="btn" style="background-color: rgba(54,188,175,1);">Appliquer les filtres</button>
   </form>
 
 
@@ -906,7 +906,6 @@ $(document).ready(function() {
                                     <button type="button" class="btn close text-white" style="background-color: #555; padding: 10px; font-size: 15px;" id="fermerPopup" data-dismiss="modal">Fermer
                                       
                                     </button>
-                                    <button type="button" class="btn btn-secondary" id="fermerPopup" data-dismiss="modal">Fermer</button>
                                     <button type="button" class="btn btn-primary"
                                       onclick="updateLead('{{ lead.id }}')">Enregistrer</button>
 
