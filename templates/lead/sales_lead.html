@@ -600,7 +600,7 @@ $(document).ready(function() {
                           </div>
 
                           <!-- edit modal -->
-                          <div class="modal fade" id="editModal-{{ lead.id }}" tabindex="-1" role="dialog"
+                          <div class="modal fade modalBody" id="editModal-{{ lead.id }}" tabindex="-1" role="dialog"
                             aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl" role="document">
                               <div class="modal-content">
@@ -903,9 +903,12 @@ $(document).ready(function() {
 
                                   <!-- Your form fields -->
                                   <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" id="fermerPopup"  data-dismiss="modal">Fermer</button>
-                                    <button type="button" class="btn" style="background-color: rgba(54,188,175,1);"
-                                      onclick="updateLead('{{ lead.id }}')"><span class="text-white">Sauvegarder</span></button>
+                                    <button type="button" class="btn close text-white" style="background-color: #555; padding: 10px; font-size: 15px;" id="fermerPopup" data-dismiss="modal">Fermer
+                                      
+                                    </button>
+                                    <button type="button" class="btn btn-secondary" id="fermerPopup" data-dismiss="modal">Fermer</button>
+                                    <button type="button" class="btn btn-primary"
+                                      onclick="updateLead('{{ lead.id }}')">Enregistrer</button>
 
                                   </div>
 

@@ -17,6 +17,11 @@
     .btn-primary:hover {
         transform: scale(1.1);
     }
+      /* Ajoutez ces styles à votre fichier CSS */
+  .modalBody {
+    max-height: 100vh; /* Limitez la hauteur pour permettre le défilement */
+    overflow-y: auto; /* Activez le défilement vertical si nécessaire */
+  }
 </style>
   <link rel="stylesheet" href="{%static 'css/feather.css' %}">
   <!-- Date Range Picker CSS -->
@@ -49,13 +54,6 @@
   <link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.5.0/css/responsive.dataTables.min.css">  
 <!--and data table new -->
 
-<style>
-  /* Ajoutez ces styles à votre fichier CSS */
-.modalBody {
-  max-height: 100vh; /* Limitez la hauteur pour permettre le défilement */
-  overflow-y: auto; /* Activez le défilement vertical si nécessaire */
-}
-</style>
 </head>
 
 <body class="vertical  light  ">

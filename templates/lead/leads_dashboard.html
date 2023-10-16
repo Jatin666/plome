@@ -322,7 +322,7 @@
         <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
           <label for="assignToUser" class="text-white ml-2 mr-2">Affecter à :</label>
           <select name="" id="assignToUser" class="form-control">
-            <option value="">Choisir un utilisateur</option>
+            <option value="">Choisir l'utilisateur</option>
             {% for user in users %}
             <option value="{{ user.id }}">{{ user.username }}</option>
             {% endfor %}
@@ -334,7 +334,7 @@
           <form method="post" action="{% url 'save_facebook_form_ids' %}">
             {% csrf_token %}
             <div class="form-control">
-              ID du formulaire :
+              ID form :
             </div>
             <input type="submit" name="save_facebook_form_ids" value="Save" class="btn text-white" style="background-color: #36BCAF; border-radius: 5px;">
           </form>
@@ -343,7 +343,7 @@
         <form method="post" action="{% url 'fetch_facebook_leads' %}" class="form-inline">
           {% csrf_token %}
           <div class="form-group mr-1" style="background-color: #313131; border-radius: 5px;">
-            <label for="page_filter" class="text-white ml-2 mr-2">Filtrer par page Facebook:</label>
+            <label for="page_filter" class="text-white ml-2 mr-2">Filtre Facebook:</label>
             <select class="form-control" class="form-control" name="page_name" id="page_filter">
               <option value="">Tous</option>
               {% for name in page_names %}
@@ -615,7 +615,7 @@
                           </div>
 
                           <!-- edit modal -->
-                          <div class="modal fade" id="editModal-{{ lead.id }}" tabindex="-1" role="dialog"
+                          <div class="modal fade modalBody" id="editModal-{{ lead.id }}" tabindex="-1" role="dialog"
                             aria-labelledby="editModalLabel" aria-hidden="true">
                             <div class="modal-dialog modal-xl" role="document">
                               <div class="modal-content">
@@ -1002,7 +1002,10 @@
                                   <!-- Your form fields -->
                                   
                                   <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" id="fermerPopup" data-dismiss="modal">Fermer</button>
+                                    <button type="button" class="btn close text-white" style="background-color: #555; padding: 10px; font-size: 15px;" id="fermerPopup" data-dismiss="modal">Fermer
+                                      
+                                    </button>
+                                    
                                     <button type="button" class="btn btn-primary"
                                       onclick="updateLead('{{ lead.id }}')">Sauvegarder</button>
 
