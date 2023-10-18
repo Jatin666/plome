@@ -96,219 +96,162 @@
               <div class="modal-body">
                 <form class="needs-validation" method="POST" action="{% url 'add_doisser_lead' %}" novalidate>
                   {% csrf_token %}
-                  <div class="card shadow">
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-md-12">
-                          <label for="date_dinscription">Date d'Inscription</label>
-                          <input type="date" name="date_dinscription" class="form-control" placeholder="First name" aria-label="First name">
-                        </div>
+                  <div class="form-row">
+                    <div class="col-md-6 mb-3">
+                      <label for="date_dinscription">Date d'Inscription</label>
+                      <input type="date" name="date_dinscription" class="form-control" required>
+                      <div class="invalid-feedback">Please provide a valid Date.</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="numero_edof">Numero EDof</label>
+                      <input type="text" name="numero_edof" class="form-control" maxlength="100" required>
+                      <div class="invalid-feedback">Please provide a valid Numero EDof.</div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="nom">Nom</label>
+                      <input type="text" name="nom" class="form-control" maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="prenom">Prenom</label>
+                      <input type="text" name="prenom" class="form-control" maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="telephone">Téléphone</label>
+                      <input type="number" name="telephone" class="form-control" maxlength="20">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="mail">Email</label>
+                      <input type="email" name="mail" class="form-control" maxlength="250">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="address_postal">Address Postal</label>
+                      <input type="text" name="address_postal" class="form-control" maxlength="300">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="statut_edof">Statut EDof</label>
+                      <input type="text" name="statut_edof" class="form-control" maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="challenge">Challenge</label>
+                      <input type="text" name="challenge" class="form-control" maxlength="300">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="colis_a_preparer">Colis à Préparer</label>
+                      <input type="text" name="colis_a_preparer" class="form-control" maxlength="300">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="prix_net">Prix Net</label>
+                      <input type="number" name="prix_net" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="conseiller">Conseiller</label>
+                      <input type="text" name="conseiller" class="form-control" maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="equipes">Équipes</label>
+                      <input type="text" name="equipes" class="form-control" maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="criteres_com">Critères Com</label>
+                      <input type="number" name="criteres_com" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="date_prevue_d_entree_en_formation">Date Prévue d'Entrée en Formation</label>
+                      <input type="datetime-local" name="date_prevue_d_entree_en_formation" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="date_prevue_de_fin_de_formation">Date Prévue de Fin de Formation</label>
+                      <input type="datetime-local" name="date_prevue_de_fin_de_formation" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="appel_effectue_le_date_time">Appel Effectué le (Date et Heure)</label>
+                      <input type="datetime-local" name="appel_effectue_le_date_time" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="appel_effectue_le_motifs">Appel Effectué le (Motifs)</label>
+                      <input type="datetime-local" name="appel_effectue_le_motifs" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="rdv_confirme_dateandtime">RDV Confirmé (Date et Heure)</label>
+                      <input type="datetime-local" name="rdv_confirme_dateandtime" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="rdv_confirme_confirmateur">RDV Confirmé (Confirmateur)</label>
+                      <input type="text" name="rdv_confirme_confirmateur" class="form-control" maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="rdv_confirme_statut_service_confirmateur">RDV Confirmé (Statut Service
+                        Confirmateur)</label>
+                      <input type="text" name="rdv_confirme_statut_service_confirmateur" class="form-control"
+                        maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_audio">Inscription Visio Entrée Audio</label>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" name="inscription_visio_entree_audio" class="custom-control-input"
+                          id="customCheck1">
+                        <label class="custom-control-label custom-checkbox-label" for="customCheck1">Cochez cette boîte</label>
                       </div>
                     </div>
-                  </div>
-
-                  <div class="card shadow mt-2">
-                    <div class="card-body">
-                      <h6 class="text-center">Information de l’Apprenant</h6>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="prenom">Prenom</label>
-                          <input type="text" name="prenom" class="form-control" placeholder="Prenom" aria-label="Prenom">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="nom">Nom</label>
-                          <input type="text" name="nom" class="form-control" placeholder="Nom" aria-label="Nom">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="telephone">Téléphone</label>
-                          <input type="number" name="telephone" class="form-control" placeholder="Téléphone" aria-label="Téléphone">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="mail">Email</label>
-                          <input type="email" name="mail" class="form-control" placeholder="Email" aria-label="Email">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-12">
-                          <label for="address_postal">Address Postal</label>
-                          <input type="text" name="address_postal" class="form-control" placeholder="Address Postal" aria-label="Address Postal">
-                        </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_niveau_de_relance">Inscription Visio Entrée Niveau de
+                        Relance</label>
+                      <input type="text" name="inscription_visio_entree_niveau_de_relance" class="form-control"
+                        maxlength="100">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_somme_facturee">Inscription Visio Entrée Somme
+                        Facturée</label>
+                      <input type="number" name="inscription_visio_entree_somme_facturee" class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_date_de_facturation">Inscription Visio Entrée Date de
+                        Facturation</label>
+                      <input type="datetime-local" name="inscription_visio_entree_date_de_facturation"
+                        class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_date_d_encaissement">Inscription Visio Entrée Date
+                        d'Encaissement</label>
+                      <input type="datetime-local" name="inscription_visio_entree_date_d_encaissement"
+                        class="form-control">
+                    </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_facture">Inscription Visio Entrée Facture: </label>
+                      <div class="custom-control custom-checkbox custom-control-inline">
+                        <input type="checkbox" name="inscription_visio_entree_facture" class="custom-control-input"
+                          id="customCheck2">
+                        <label class="custom-control-label custom-checkbox-label" for="customCheck2">Cochez cette boîte</label>
                       </div>
                     </div>
-                  </div>
-
-                  <div class="card shadow mt-2">
-                    <div class="card-body">
-                      <h6 class="text-center">Information EDOF</h6>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <label for="numero_edof">Numero EDof</label>
-                          <input type="text" name="numero_edof" class="form-control" placeholder="Numero EDof" aria-label="Numero EDof">
-                          <div class="invalid-feedback">Veuillez fournir un numéro EDof valide.</div>
-                        </div>
-                        <div class="col-md-6">
-                          <label for="statut_edof">Statut EDof</label>
-                          <input type="text" name="statut_edof" class="form-control" placeholder="Statut EDof" aria-label="Statut EDof">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="date_prevue_d_entree_en_formation">Date Prévue d'Entrée en Formation</label>
-                          <input type="datetime-local" name="date_prevue_d_entree_en_formation" class="form-control" placeholder="Date Prévue d'Entrée en Formation" aria-label="Date Prévue d'Entrée en Formation">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="date_prevue_de_fin_de_formation">Date Prévue de Fin de Formation</label>
-                          <input type="datetime-local" name="date_prevue_de_fin_de_formation" class="form-control" placeholder="Date Prévue de Fin de Formation" aria-label="Date Prévue de Fin de Formation">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="inscription_visio_entree_num_facture">Inscription Visio Entrée Numéro Facture</label>
-                          <input type="text" name="inscription_visio_entree_num_facture" class="form-control" placeholder="Inscription Visio Entrée Numéro Facture" aria-label="Inscription Visio Entrée Numéro Facture">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="inscription_visio_entree_somme_facturee">Inscription Visio Entrée Somme Facturée</label>
-                          <input type="number" name="inscription_visio_entree_somme_facturee" class="form-control" placeholder="Inscription Visio Entrée Somme Facturée" aria-label="Inscription Visio Entrée Somme Facturée">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-12">
-                          <label for="inscription_visio_entree_date_d_encaissement">Inscription Visio Entrée Date d'Encaissement</label>
-                          <input type="datetime-local" name="inscription_visio_entree_date_d_encaissement" class="form-control" placeholder="Inscription Visio Entrée Date d'Encaissement" aria-label="Inscription Visio Entrée Date d'Encaissement">
-                        </div>
-                      </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_num_facture">Inscription Visio Entrée Numéro de
+                        Facture</label>
+                      <input type="text" name="inscription_visio_entree_num_facture" class="form-control"
+                        maxlength="300">
                     </div>
-                  </div>
-
-                  <div class="card shadow mt-2">
-                    <div class="card-body">
-                      <h6 class="text-center">Information conseiller</h6>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="conseiller">Conseiller</label>
-                          <input type="text" name="conseiller" class="form-control" placeholder="Conseiller" aria-label="Conseiller">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="criteres_com">Critères Com</label>
-                          <input type="number" name="criteres_com" class="form-control" placeholder="Critères Com" aria-label="Critères Com">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-12">
-                          <label for="equipes">Équipes</label>
-                          <input type="text" name="equipes" class="form-control" placeholder="Équipes" aria-label="Équipes">
-                        </div>
-                      </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_colis_a_envoyer_le">Inscription Visio Entrée Colis à Envoyer
+                        le</label>
+                      <input type="datetime-local" name="inscription_visio_entree_colis_a_envoyer_le"
+                        class="form-control">
                     </div>
-                  </div>
-
-                  <div class="card shadow mt-2">
-                    <div class="card-body">
-                      <h6 class="text-center">Service Qualité </h6>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="challenge">Challenge</label>
-                          <input type="text" name="challenge" class="form-control" placeholder="Challenge" aria-label="Challenge">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="appel_effectue_le_date_time">Appel Effectué le (Date et Heure)</label>
-                          <input type="datetime-local" name="appel_effectue_le_date_time" class="form-control" placeholder="Appel Effectué le (Date et Heure)" aria-label="Appel Effectué le (Date et Heure)">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="rdv_confirme_dateandtime">RDV Confirmé (Date et Heure)</label>
-                          <input type="datetime-local" name="rdv_confirme_dateandtime" class="form-control" placeholder="RDV Confirmé (Date et Heure)" aria-label="RDV Confirmé (Date et Heure)">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="rdv_confirme_confirmateur">RDV Confirmé (Confirmateur)</label>
-                          <input type="text" name="rdv_confirme_confirmateur" class="form-control" placeholder="RDV Confirmé (Confirmateur)" aria-label="RDV Confirmé (Confirmateur)">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="rdv_confirme_statut_service_confirmateur">RDV Confirmé (Statut Service Confirmateur)</label>
-                          <input type="text" name="rdv_confirme_statut_service_confirmateur" class="form-control" placeholder="RDV Confirmé (Statut Service Confirmateur)" aria-label="RDV Confirmé (Statut Service Confirmateur)">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="prix_net">Prix Net</label>
-                          <input type="number" name="prix_net" class="form-control" placeholder="prix_net" aria-label="prix_net">
-                        </div>
-                      </div>
-
-                      <div class="row mt-3">
-                        <div class="col-md-6">
-                          <label for="appel_effectue_le_motifs">Appel Effectué le (Motifs)</label>
-                          <input type="datetime-local" name="appel_effectue_le_motifs" class="form-control" placeholder="RDV Confirmé (Statut Service Confirmateur)" aria-label="RDV Confirmé (Statut Service Confirmateur)">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="inscription_visio_entree_niveau_de_relance">Inscription Visio Entrée Niveau de Relance</label>
-                          <input type="text" name="inscription_visio_entree_niveau_de_relance" class="form-control" placeholder="Inscription Visio Entrée Niveau de Relance" aria-label="Inscription Visio Entrée Niveau de Relance">
-                        </div>
-                      </div>
-
-                      <div class="row mt-3">
-                        <div class="col-md-6">                          
-                          <label for="inscription_visio_entree_date_de_facturation">Inscription Visio Entrée Date de Facturation</label>
-                          <input type="datetime-local" name="inscription_visio_entree_date_de_facturation" class="form-control" placeholder="RDV Confirmé (Statut Service Confirmateur)" aria-label="RDV Confirmé (Statut Service Confirmateur)">
-                        </div>
-                        <div class="col-md-6">
-                          <label for="inscription_visio_entree_numero_de_suivi_vers_point_relais">Inscription Visio Entrée Numéro de Suivi vers Point Relais</label>                          
-                          <input ttype="text" name="inscription_visio_entree_numero_de_suivi_vers_point_relais" class="form-control" placeholder="inscription_visio_entree_numero_de_suivi_vers_point_relais" aria-label="inscription_visio_entree_numero_de_suivi_vers_point_relais">
-                        </div>
-                      </div>
-
-                      <div class="row mt-3">
-                        <div class="col-md-6">  
-                        <label for="inscription_visio_entree_audio">Inscription Visio Entrée Audio</label>
-                        <div class="custom-control custom-checkbox custom-control-inline">
-                          <input type="checkbox" name="inscription_visio_entree_audio" class="custom-control-input"
-                            id="customCheck1">
-                          <label class="custom-control-label custom-checkbox-label" for="customCheck1">Cochez cette boîte</label>
-                        </div>                        
-                        </div>
-
-                        <div class="col-md-6">
-                          <label for="inscription_visio_entree_facture">Inscription Visio Entrée Facture: </label>
-                          <div class="custom-control custom-checkbox custom-control-inline">
-                            <input type="checkbox" name="inscription_visio_entree_facture" class="custom-control-input"
-                              id="customCheck2">
-                            <label class="custom-control-label custom-checkbox-label" for="customCheck2">Cochez cette boîte</label>
-                          </div>
-                        </div>
-                      </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_numero_de_suivi_vers_point_relais">Inscription Visio Entrée
+                        Numéro de Suivi vers Point Relais</label>
+                      <input type="text" name="inscription_visio_entree_numero_de_suivi_vers_point_relais"
+                        class="form-control" maxlength="100">
                     </div>
-                  </div>
-
-                  <div class="card shadow mt-2">
-                    <div class="card-body">
-                      <h6 class="text-center">Information Colis</h6>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <label for="inscription_visio_entree_colis_a_envoyer_le">Inscription Visio Entrée Colis à Envoyer le</label>
-                          <input type="datetime-local" name="inscription_visio_entree_colis_a_envoyer_le" class="form-control" placeholder="Inscription Visio Entrée Colis à Envoyer le" aria-label="Inscription Visio Entrée Colis à Envoyer le">
-                        </div>
-                        <div class="col-md-6">                          
-                          <label for="colis_a_preparer">Colis à Préparer</label>
-                          <input type="text" name="colis_a_preparer" class="form-control" placeholder="Colis à Préparer" aria-label="Colis à Préparer">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-12">
-                          <label for="inscription_visio_entree_statut_colis">Inscription Visio Entrée Statut Colis</label>
-                          <input type="text" name="inscription_visio_entree_statut_colis" class="form-control" placeholder="Inscription Visio Entrée Statut Colis" aria-label="Inscription Visio Entrée Statut Colis">
-                        </div>
-                      </div>
-                      <div class="row mt-3">
-                        <div class="col-md-12">
-                          
-                          <label for="inscription_visio_entree_commentaires">Inscription Visio Entrée Commentaires</label>
-                          <textarea name="inscription_visio_entree_commentaires" class="form-control" rows="3"></textarea>
-                        </div>
-                      </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_commentaires">Inscription Visio Entrée Commentaires</label>
+                      <textarea name="inscription_visio_entree_commentaires" class="form-control" rows="3"></textarea>
                     </div>
+                    <div class="col-md-6 mb-3">
+                      <label for="inscription_visio_entree_statut_colis">Inscription Visio Entrée Statut Colis</label>
+                      <input type="text" name="inscription_visio_entree_statut_colis" class="form-control"
+                        maxlength="100">
+                    </div>
+                    <!-- Custom Fields (Handle JSONField as needed) -->
                   </div>
                   <button class="btn btn-primary" type="submit">Envoyer</button>
                 </form>
