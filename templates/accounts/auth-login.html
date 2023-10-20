@@ -73,10 +73,10 @@
                     },
                     messages: {
                       email: {
-                        required: "Please enter a valid email",
+                        required: "Veuillez saisir un e-mail valide",
                       },
                       password: {
-                        required: "Please Fill the Empty Box",
+                        required: "Veuillez saisir un mot de passe",
                       }
                     },
                     errorPlacement: function(error, element) {
@@ -115,8 +115,8 @@
 								if (jsonData !== "notok") {
 									loading = false;
 									Swal.fire(
-										'Success!',
-										'User logged in successfully!',
+										'Succès!',
+										'L\'utilisateur s\'est connecté avec succès !',
 										'success'
 									).then(function() {
 										window.location.href = jsonData;
@@ -125,7 +125,7 @@
 									Swal.fire({
 										icon: 'error',
 										title: 'Oops...',
-										text: 'Credentials are Incorrect!',
+										text: 'Les références sont incorrectes !',
 									  })
 								}
 							}
