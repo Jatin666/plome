@@ -255,7 +255,7 @@ def lead_dashboard(request, lead_id=None):
             
             lead.save()
            
-            notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+            notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
 
             url = reverse('filtered_lead_dashboard', args=[assigned_user.id])
             url_with_notification = f'{url}?notification={notification_message}'
@@ -304,7 +304,7 @@ def lead_dashboard(request, lead_id=None):
             filtered_leads = filtered_leads.filter(qualification=selected_qualification)
         
         duplicates_deleted = delete_duplicate_leads()
-        messages.success(request, f'{duplicates_deleted} duplicate leads deleted.')
+        messages.success(request, f'{duplicates_deleted} suppression des pistes dupliquées.')
         if lead_id is not None:
             lead = get_object_or_404(Lead, id=lead_id)
         else:
@@ -408,9 +408,9 @@ def save_appointment(request):
         lead.save()
 
         send_mail(
-            'Appointment Scheduled',
+            'Rendez-vous programmé',
             # need to add the user name
-            f'Your appointment is scheduled on {lead.appointment_date_time}. ',
+            f'Votre rendez-vous est prévu le {lead.appointment_date_time}. ',
             'sender@example.com',
             [lead.email],
             fail_silently=False,
@@ -452,8 +452,8 @@ def send_reminder_emails():
 
             if reminder_datetime_paris <= local_now:
                 # Send reminder email
-                subject = 'Reminder: Your Appointment'
-                message = f"Don't forget, you have an appointment at {lead.appointment_date_time}."
+                subject = 'Rappel : Votre rendez-vous'
+                message = f"N'oubliez pas que vous avez un rendez-vous à {lead.appointment_date_time}."
                 sender_email = settings.EMAIL_HOST_USER
                 receiver_email = lead.email
 
@@ -520,9 +520,9 @@ def transfer_lead_to_doisser(request, lead):
         'email': 'mail',
         'price': 'prix_net',
         'qualification': 'qualification',
-        'comments': 'comments',
+        'comments': 'commentaires',
         'assigned_to': 'conseiller',
-        'company': 'company',
+        'company': 'compagnie',
     }
 
     # Create a new Doisser instance
@@ -1116,7 +1116,7 @@ def lead_edit(request, lead_id):
 
         #Saving the notification for assign
         if assigned_user_id:
-            notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+            notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
             user = CustomUserTypes.objects.get(id=assigned_user_id)
             notification = Notification(user=user, lead=lead, message=notification_message)
             notification.save()
@@ -1596,7 +1596,7 @@ def assign_leads(request):
                
                 lead.save()
 
-                notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+                notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
                 notification = Notification(user=assigned_user, lead=lead, message=notification_message)
                 notification.save()
                 changes = 'Assigned'
@@ -2696,7 +2696,7 @@ def transfer_leads(request):
 #         lead.save()
 #         #Saving the notification for assign
 #         if assigned_user_id:
-#             notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+#             notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
 #             user = CustomUserTypes.objects.get(id=assigned_user_id)
 #             notification = Notification(user=user, lead=lead, message=notification_message)
 #             notification.save()

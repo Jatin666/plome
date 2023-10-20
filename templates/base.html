@@ -71,7 +71,7 @@
       </button>
       <form class="form-inline mr-auto searchform text-muted">
         <input class="form-control mr-sm-2 bg-transparent border-0 pl-4 text-muted" type="search"
-          placeholder="Type something..." aria-label="Search">
+          placeholder="Saisissez quelque chose..." aria-label="Search">
       </form>
       <ul class="nav">
         <li class="nav-item">
@@ -292,11 +292,11 @@
       <div class="modal-body" style="overflow-y: auto;">
         <div class="list-group list-group-flush my-n3" id="notificationList">
           <!-- Dynamic notifications will be added here -->
-          <div class="list-group-item">Loading notifications...</div>
+          <div class="list-group-item">Chargement des notifications...</div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary btn-block" onclick="clearAllNotifications()" data-dismiss="modal">Clear All</button>
+        <button type="button" class="btn btn-secondary btn-block" onclick="clearAllNotifications()" data-dismiss="modal">Tout effacer</button>
       </div>
     </div>
   </div>
@@ -322,7 +322,7 @@
           unreadNotificationCount.text(0);
     
           if (data.length === 0) {
-            notificationList.append('<div class="list-group-item">No new notifications</div>');
+            notificationList.append('<div class="list-group-item">Pas de nouvelle notification</div>');
           } else {
             var totalCount = 0;
             var customNotification = '';
@@ -341,13 +341,13 @@
               // Function to format time ago
               function formatTimeAgo(timeDiff) {
                 if (timeDiff < 60) {
-                  return timeDiff + 's ago';
+                  return 'il y\'a' + ' '+ timeDiff +' ' + 's';
                 } else if (timeDiff < 3600) {
-                  return Math.floor(timeDiff / 60) + 'm ago';
+                  return 'il y\'a' + ' '+ Math.floor(timeDiff / 60) +' ' + 'm';
                 } else if (timeDiff < 86400) {
-                  return Math.floor(timeDiff / 3600) + 'h ago';
+                  return 'il y\'a' + ' '+ Math.floor(timeDiff / 3600) +' ' + 'h';
                 } else {
-                  return Math.floor(timeDiff / 86400) + 'd ago';
+                  return 'il y\'a' + ' '+ Math.floor(timeDiff / 86400) +' ' + 'j';
                 }
               }
     
@@ -360,7 +360,7 @@
               
               /* else {
                 if (groupCount > 0) {
-                  viewAllLink = '<a href="{% url "all_notifications" %}" class="view-all-link">View all notifications</a>';
+                  viewAllLink = '<a href="{% url "all_notifications" %}" class="view-all-link">Voir toutes les notifications</a>';
                   // Display the custom notification for the previous hour group
                   customNotification = '<div class="list-group-item bg-transparent">' +
                     '<div class="row align-items-center">' +
@@ -402,12 +402,12 @@
             });
             
             if (groupCount > 0) {
-              viewAllLink = '<a href="{% url "view_notifications" %}" class="view-all-link">View all notifications</a>';
+              viewAllLink = '<a href="{% url "view_notifications" %}" class="view-all-link">Voir toutes les notifications</a>';
               // Display the custom notification for the last hour group
               customNotification = '<div class="list-group-item bg-transparent">' +
                 '<div class="row align-items-center">' +
                 '<div class="col">' +
-                '<small><strong>' + groupCount + ' notifications received in the last hour</strong></small><br>' +
+                '<small><strong>' + groupCount + ' notifications reçues dans la dernière heure</strong></small><br>' +
                 viewAllLink +
                 '</div>' +
                 '</div>' +
