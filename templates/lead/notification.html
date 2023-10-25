@@ -9,51 +9,51 @@
 
 
 
-        <!-- Small table -->
-        <div class="row my-2">
-          <div class="col-md-12">
-            <div class="card shadow">
-              <div class="card-body">
-                <!-- table -->
-                <div class="table-responsive">
-                  <table class="table table-hover table-bordered datatables" id="exampleDT">
-                    <thead class="thead-dark">
-                      <tr>
-                        <th>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="all2">
-                            <label class="custom-control-label" for="all2"></label>
-                          </div>
-                        </th>
-                        <th>Expéditeur</th>
-                        <th>Date et Heure</th>
-                        <th>Message</th>
-                        <th>Lu</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {% for notification in notifications %}
-                      <tr onclick="openNotificationModal('{{ notification.id }}', '{{ notification.lead.id }}')">
-                        <td>
-                          <div class="custom-control custom-checkbox">
-                            <input type="checkbox" class="custom-control-input" id="{{ notification.id }}">
-                            <label class="custom-control-label" for="{{ notification.id }}"></label>
-                          </div>
-                        </td>
-                        <td>{{ notification.lead.assigned_to }}</td>
-                        <td>{{ notification.timestamp }}</td>
-                        <td>{{ notification.message }}</td>
-                        <td>{% if notification.is_read %}Oui{% else %}Non{% endif %}</td>
-                      </tr>
-                      {% endfor %}
-                    </tbody>
-
-                  </table>
-                </div>
-              </div>
-            </div>
-          </div>
+    <!-- Small table -->
+<div class="row my-2">
+  <div class="col-md-12">
+    <div class="card shadow">
+      <div class="card-body">
+        <!-- table -->
+        <div class="table-responsive">
+          <table class="table table-hover table-bordered datatables" id="exampleDT">
+            <thead class="fw-bold">
+              <tr>
+                <th>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="all2">
+                    <label class="custom-control-label" for="all2"></label>
+                  </div>
+                </th>
+                <th>Sender</th>
+                  <th>Date and Time</th>
+                  <th>Message</th>
+                  <th>Is Read</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for notification in notifications %}
+              <tr onclick="openNotificationModal('{{ notification.id }}', '{{ notification.lead.id }}')">
+                <td>
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="{{ notification.id }}">
+                    <label class="custom-control-label" for="{{ notification.id }}"></label>
+                  </div>
+                </td>
+                <td>{{ notification.lead.assigned_to }}</td>
+                <td>{{ notification.timestamp }}</td>
+                <td>{{ notification.message }}</td>
+                <td>{% if notification.is_read %}Yes{% else %}No{% endif %}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+            
+          </table>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
 
         <script>
           function openNotificationModal(notificationId, leadId) {

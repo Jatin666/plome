@@ -63,7 +63,7 @@
             </button>
             <form class="form-inline mr-auto searchform text-muted">
                 <input class="form-control mr-sm-2 bg-transparent border-0 pl-4 text-muted" type="search"
-                    placeholder="Type something..." aria-label="Search">
+                    placeholder="Saisissez quelque chose..." aria-label="Search">
             </form>
             <ul class="nav">
                 <li class="nav-item">
@@ -310,7 +310,7 @@
                 unreadNotificationCount.text(0);
 
                 if (data.length === 0) {
-                    notificationList.append('<div class="list-group-item">No new notifications</div>');
+                    notificationList.append('<div class="list-group-item">Pas de nouvelle notification</div>');
                 } else {
                     var totalCount = 0;
                     var customNotification = '';
@@ -348,7 +348,7 @@
 
                         /* else {
                           if (groupCount > 0) {
-                            viewAllLink = '<a href="{% url "all_notifications" %}" class="view-all-link">View all notifications</a>';
+                            viewAllLink = '<a href="{% url "all_notifications" %}" class="view-all-link">Voir toutes les notifications</a>';
                             // Display the custom notification for the previous hour group
                             customNotification = '<div class="list-group-item bg-transparent">' +
                               '<div class="row align-items-center">' +
@@ -390,12 +390,12 @@
                     });
 
                     if (groupCount > 0) {
-                        viewAllLink = '<a href="{% url "view_notifications" %}" class="view-all-link">View all notifications</a>';
+                        viewAllLink = '<a href="{% url "view_notifications" %}" class="view-all-link">Voir toutes les notifications</a>';
                         // Display the custom notification for the last hour group
                         customNotification = '<div class="list-group-item bg-transparent">' +
                             '<div class="row align-items-center">' +
                             '<div class="col">' +
-                            '<small><strong>' + groupCount + ' notifications received in the last hour</strong></small><br>' +
+                            '<small><strong>' + groupCount + ' notifications reçues dans la dernière heure</strong></small><br>' +
                             viewAllLink +
                             '</div>' +
                             '</div>' +
@@ -407,7 +407,7 @@
                 }
             },
             error: function () {
-                console.error('Failed to fetch notifications.');
+                console.error('Échec de la récupération des notifications.');
             }
         });
     }
@@ -445,7 +445,7 @@
                 }
             },
             error: function () {
-                console.error('Failed to mark notification as read.');
+                console.error('La notification n\'a pas été marquée comme lue.');
             }
         });
     }
@@ -467,7 +467,7 @@
                 }
             },
             error: function () {
-                console.error('Failed to clear all notifications.');
+                console.error('Échec de l\'effacement des notifications.');
             }
         });
     }

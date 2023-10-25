@@ -4,7 +4,7 @@
 
 <head>
 
-  <title>Tiny Dashboard - A Bootstrap Dashboard Template</title>
+  <title>CRM | PLOME</title>
 
   <link rel="stylesheet" href="{%static 'css/feather.css' %}">
   <!-- Date Range Picker CSS -->
@@ -47,7 +47,7 @@
       </button>
       <form class="form-inline mr-auto searchform text-muted">
         <input class="form-control mr-sm-2 bg-transparent border-0 pl-4 text-muted" type="search"
-          placeholder="Type something..." aria-label="Search">
+          placeholder="Saisissez quelque chose..." aria-label="Search">
       </form>
       <ul class="nav">
         <li class="nav-item">
@@ -105,28 +105,28 @@
           <li class="nav-item dropdown">
             <a href="#dashboard" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
               <i class="fe fe-home fe-16"></i>
-              <span class="ml-3 item-text">Dashboard</span><span class="sr-only">(current)</span>
+              <span class="ml-3 item-text">Tableau de bord</span><span class="sr-only">(current)</span>
             </a>
             <ul class="collapse list-unstyled pl-4 w-100" id="dashboard">
               <li class="nav-item">
-                <a class="nav-link pl-3" href="{% url 'admin_dashboard' %}"><span class="ml-1">Home</span></a>
+                <a class="nav-link pl-3" href="{% url 'admin_dashboard' %}"><span class="ml-1">Accueil</span></a>
               </li>
               <!-- Add more dropdown items here if needed -->
             </ul>
           </li>
         </ul>
         <p class="text-muted nav-heading mt-4 mb-1">
-          <span>Components</span>
+          <span>Composants</span>
         </p>
         <ul class="navbar-nav flex-fill w-100 mb-2">
           <li class="nav-item dropdown">
             <a href="#user" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle nav-link">
               <i class="fe fe-user fe-16"></i>
-              <span class="ml-3 item-text">Users</span>
+              <span class="ml-3 item-text">Utilisateurs</span>
             </a>
             <ul class="collapse list-unstyled pl-4 w-100" id="user">
-              <a class="nav-link pl-3" href="{% url 'add_new_user' %}"><span class="ml-1">Add new users</span></a>
-              <a class="nav-link pl-3" href="#"><span class="ml-1">Deactivate users</span></a>
+              <a class="nav-link pl-3" href="{% url 'add_new_user' %}"><span class="ml-1">Ajouter des utilisateurs</span></a>
+              <a class="nav-link pl-3" href="#"><span class="ml-1">Désactiver des utilisateurs</span></a>
 
             </ul>
           </li>
@@ -572,7 +572,7 @@
           notificationList.empty(); // Clear existing notifications
           unreadNotificationCount.text(0);
           if (data.length === 0) {
-            notificationList.append('<div class="list-group-item">No new notifications</div>');
+            notificationList.append('<div class="list-group-item">Pas de nouvelle notification</div>');
           } else {
             var totalCount = 0;
             var customNotification = '';
@@ -588,13 +588,13 @@
               // Function to format time ago
               function formatTimeAgo(timeDiff) {
                 if (timeDiff < 60) {
-                  return timeDiff + 's ago';
+                  return 'il y\'a' + ' '+ timeDiff +' ' + 's';
                 } else if (timeDiff < 3600) {
-                  return Math.floor(timeDiff / 60) + 'm ago';
+                  return 'il y\'a' + ' '+ Math.floor(timeDiff / 60) +' ' + 'm';
                 } else if (timeDiff < 86400) {
-                  return Math.floor(timeDiff / 3600) + 'h ago';
+                  return 'il y\'a' + ' '+ Math.floor(timeDiff / 3600) +' ' + 'h';
                 } else {
-                  return Math.floor(timeDiff / 86400) + 'd ago';
+                  return 'il y\'a' + ' '+ Math.floor(timeDiff / 86400) +' ' + 'j';
                 }
               }
               var notificationHour = notificationTime.getHours();
@@ -603,13 +603,13 @@
               } else {
                 if (groupCount > 0) {
                   viewAllLink =
-                    '<a href="{% url "all_notifications" %}" class="view-all-link">View all notifications</a>';
+                    '<a href="{% url "all_notifications" %}" class="view-all-link">Voir toutes les notifications</a>';
                   // Display the custom notification for the previous hour group
                   customNotification = '<div class="list-group-item bg-transparent">' +
                     '<div class="row align-items-center">' +
                     '<div class="col">' +
                     '<small><strong>' + groupCount +
-                    ' notifications received in the last hour</strong></small><br/>' +
+                    ' notifications reçues dans la dernière heure</strong></small><br/>' +
                     viewAllLink +
                     '</div>' +
                     '</div>' +
@@ -641,12 +641,12 @@
             });
             if (groupCount > 0) {
               viewAllLink =
-                '<a href="{% url "all_notifications" %}" class="view-all-link">View all notifications</a>';
+                '<a href="{% url "all_notifications" %}" class="view-all-link">Voir toutes les notifications</a>';
               // Display the custom notification for the last hour group
               customNotification = '<div class="list-group-item bg-transparent">' +
                 '<div class="row align-items-center">' +
                 '<div class="col">' +
-                '<small><strong>' + groupCount + ' notifications received in the last hour</strong></small><br>' +
+                '<small><strong>' + groupCount + ' notifications reçues dans la dernière heure</strong></small><br>' +
                 viewAllLink +
                 '</div>' +
                 '</div>' +
@@ -657,7 +657,7 @@
           }
         },
         error: function () {
-          console.error('Failed to fetch notifications.');
+          console.error('Échec de la récupération des notifications.');
         }
       });
     }

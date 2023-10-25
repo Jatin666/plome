@@ -255,7 +255,7 @@ def lead_dashboard(request, lead_id=None):
             
             lead.save()
            
-            notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+            notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
 
             url = reverse('filtered_lead_dashboard', args=[assigned_user.id])
             url_with_notification = f'{url}?notification={notification_message}'
@@ -304,7 +304,7 @@ def lead_dashboard(request, lead_id=None):
             filtered_leads = filtered_leads.filter(qualification=selected_qualification)
         
         duplicates_deleted = delete_duplicate_leads()
-        messages.success(request, f'{duplicates_deleted} duplicate leads deleted.')
+        messages.success(request, f'{duplicates_deleted} suppression des pistes dupliquées.')
         if lead_id is not None:
             lead = get_object_or_404(Lead, id=lead_id)
         else:
@@ -408,9 +408,9 @@ def save_appointment(request):
         lead.save()
 
         send_mail(
-            'Appointment Scheduled',
+            'Rendez-vous programmé',
             # need to add the user name
-            f'Your appointment is scheduled on {lead.appointment_date_time}. ',
+            f'Votre rendez-vous est prévu le {lead.appointment_date_time}. ',
             'sender@example.com',
             [lead.email],
             fail_silently=False,
@@ -452,8 +452,8 @@ def send_reminder_emails():
 
             if reminder_datetime_paris <= local_now:
                 # Send reminder email
-                subject = 'Reminder: Your Appointment'
-                message = f"Don't forget, you have an appointment at {lead.appointment_date_time}."
+                subject = 'Rappel : Votre rendez-vous'
+                message = f"N'oubliez pas que vous avez un rendez-vous à {lead.appointment_date_time}."
                 sender_email = settings.EMAIL_HOST_USER
                 receiver_email = lead.email
 
@@ -520,9 +520,9 @@ def transfer_lead_to_doisser(request, lead):
         'email': 'mail',
         'price': 'prix_net',
         'qualification': 'qualification',
-        'comments': 'comments',
+        'comments': 'commentaires',
         'assigned_to': 'conseiller',
-        'company': 'company',
+        'company': 'compagnie',
     }
 
     # Create a new Doisser instance
@@ -1116,7 +1116,7 @@ def lead_edit(request, lead_id):
 
         #Saving the notification for assign
         if assigned_user_id:
-            notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+            notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
             user = CustomUserTypes.objects.get(id=assigned_user_id)
             notification = Notification(user=user, lead=lead, message=notification_message)
             notification.save()
@@ -1596,7 +1596,7 @@ def assign_leads(request):
                
                 lead.save()
 
-                notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+                notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
                 notification = Notification(user=assigned_user, lead=lead, message=notification_message)
                 notification.save()
                 changes = 'Assigned'
@@ -2473,6 +2473,362 @@ def transfer_leads(request):
         return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 
-def mon_aide_btp(request):
-    return render(request,'lead/mon_aide_btp.html')
 
+
+
+# def transfer_leads(request):
+    
+#     if request.method == 'POST':
+#         lead_id = request.POST['leadid']
+#         username = json.loads(request.POST['username'])  #transfer to
+#         fulltext = request.POST['fulltext']
+
+#         current_user = request.user
+      
+#         username = username.get('username')
+#         if username:
+#             new_assigned_transfer = get_object_or_404(CustomUserTypes, username=username)
+#             if new_assigned_transfer:
+#                 lead = get_object_or_404(Lead, id=lead_id)
+#                 if not lead.current_transfer and lead.transfer_to:
+#                     lead.current_transfer = lead.transfer_to 
+
+#                 if lead.current_transfer and lead.transfer_to:
+#                     lead.current_transfer = lead.transfer_to
+                    
+
+#                 lead.transfer_to = new_assigned_transfer
+#                 lead.is_transferred = True
+#                 lead.save()
+
+#                 changes = f"{fulltext}"
+
+#                 # LeadHistory.objects.create(lead=lead, user=current_user, previous_assigned_to=lead.current_assigned_to, current_assigned_to=lead.transfer_to, changes=changes)
+
+
+#                 LeadHistory.objects.create(lead=lead, user=current_user,  previous_assigned_to=lead.current_transfer, current_assigned_to=lead.transfer_to, changes=changes, category='mention')
+
+#                 notification_message = f'You have new mention lead'
+
+#                 notification = Notification(user=new_assigned_transfer, lead=lead, message=notification_message)
+#                 notification.save()
+#                 return JsonResponse({'success': 'success'}, status=200)
+            
+#         return JsonResponse({'error': 'Username not found'}, status=503)
+        
+#     else:
+#         return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+
+# def parse_date(date_str):
+#     try:
+#         # Try parsing with format '%Y-%m-%d %H:%M:%S'
+#         return datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+#     except ValueError:
+#         try:
+#             # Try parsing with format '44764,59196'
+#             if isinstance(date_str, pd.Timestamp):
+#                 date_str = str(date_str)
+#             timestamp = float(date_str.replace(',', '.')) * 86400
+#             min_datetime = datetime(1970, 1, 1, tzinfo=timezone.utc)
+#             max_datetime = datetime(9999, 12, 31, 23, 59, 59, tzinfo=timezone.utc)
+
+#             # Check if the parsed timestamp is within a reasonable range
+#             if min_datetime.timestamp() <= timestamp <= max_datetime.timestamp():
+#                 return datetime.fromtimestamp(timestamp)
+#             else:
+#                 return None
+#         except ValueError:
+#             return None
+
+# def import_leads(request):
+#     if request.method == 'POST' and request.FILES.get('file'):
+#         file = request.FILES['file']
+#         try:
+#             if file.name.endswith('.csv'):
+#                 imported_leads = []
+#                 csv_reader = csv.reader(file.read().decode('utf-8').splitlines())
+#                 header = next(csv_reader)  # Get the header row
+#                 for row in csv_reader:
+#                     date_de_soumission = parse_date(row[0].strip('“”'))
+#                     if not date_de_soumission:
+#                         continue  # Skip this row if date is not valid
+#                     lead = Lead(
+#                         date_de_soumission=date_de_soumission,
+#                         nom_de_la_campagne=row[1],
+#                         avez_vous_travaille=row[2],
+#                         nom=row[3],
+#                         prenom=row[4],
+#                         telephone=row[5],
+#                         email=row[6],
+#                         qualification=row[7],
+#                         comments=row[8]
+#                     )
+#                     imported_leads.append(lead)
+#                 Lead.objects.bulk_create(imported_leads)
+#             elif file.name.endswith('.xlsx'):
+#                 df = pd.read_excel(file)
+#                 df = df.where(pd.notna(df), None)  # Convert NaN to None
+#                 imported_leads = [
+#                     Lead(
+#                         date_de_soumission=parse_date(row[0]),
+#                         nom_de_la_campagne=row[1],
+#                         avez_vous_travaille=row[2],
+#                         nom=row[3],
+#                         prenom=row[4],
+#                         telephone=row[5],
+#                         email=row[6],
+#                         qualification=row[7],
+#                         comments=row[8]
+#                     ) for row in df.values
+#                 ]
+#                 Lead.objects.bulk_create(imported_leads)
+#             else:
+#                 raise ValueError('Unsupported file format. Please provide a CSV or XLSX file.')
+
+#             messages.success(request, f'{len(imported_leads)} leads imported successfully.')
+#         except Exception as e:
+#             messages.error(request, f'Error importing leads: {str(e)}')
+
+#     return redirect('lead_dashboard')
+
+
+
+# def parse_date(date_str):
+#     try:
+#         # Try parsing with format '%Y-%m-%d %H:%M:%S'
+#         return datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+#     except ValueError:
+#         try:
+#             # Try parsing with format '44764,59196'
+#             timestamp = float(date_str.replace(',', '.')) * 86400
+#             min_datetime = datetime(1970, 1, 1, tzinfo=timezone.utc)
+#             max_datetime = datetime(9999, 12, 31, 23, 59, 59, tzinfo=timezone.utc)
+
+#             # Check if the parsed timestamp is within a reasonable range
+#             if min_datetime.timestamp() <= timestamp <= max_datetime.timestamp():
+#                 return datetime.fromtimestamp(timestamp)
+#             else:
+#                 return None
+#         except ValueError:
+#             return None
+        
+
+
+
+
+# def parse_date(date_str):
+#     try:
+#         # Try parsing with format '%Y-%m-%d %H:%M:%S'
+#         return datetime.strptime(date_str, '%Y-%m-%d %H:%M:%S')
+#     except ValueError:
+#         try:
+#             # Try parsing with format '44764,59196'
+#             if isinstance(date_str, pd.Timestamp):
+#                 date_str = str(date_str)
+#             timestamp = float(date_str.replace(',', '.')) * 86400
+#             min_datetime = datetime(1970, 1, 1, tzinfo=timezone.utc)
+#             max_datetime = datetime(9999, 12, 31, 23, 59, 59, tzinfo=timezone.utc)
+
+#             # Check if the parsed timestamp is within a reasonable range
+#             if min_datetime.timestamp() <= timestamp <= max_datetime.timestamp():
+#                 return datetime.fromtimestamp(timestamp)
+#             else:
+#                 return None
+#         except ValueError:
+#             return None
+
+
+# def delete_lead(request, lead_id):
+#     lead = get_object_or_404(Lead, id=lead_id)
+#     print('________________-',lead)
+
+#     if request.method == 'POST':
+#         # Delete the lead
+#         lead.delete()
+
+#         return JsonResponse({'message': 'Lead deleted successfully.'})
+
+#     return JsonResponse({'error': 'Invalid request.'})
+
+
+# def lead_edit(request, lead_id):
+#     lead = get_object_or_404(Lead, id=lead_id)
+
+#     if request.method == 'POST':
+#         form_data = request.POST.copy()  # Make a copy of the POST data to modify it
+#         assigned_user_id = form_data.get('assigned_to')  # Get the assigned user ID from the form data
+#         price = form_data.get('price', None)
+#         print("______________________________",price)
+
+#         try:
+#             lead.price = Decimal(price) if price else None
+#         except (InvalidOperation, TypeError):
+#             messages.error(request, 'Invalid price. Please enter a valid number.')
+#             return render(request, 'lead/lead_edit.html', {'lead': lead})
+        
+
+#         if assigned_user_id:
+#             try:
+#                 assigned_user = CustomUserTypes.objects.get(id=assigned_user_id)
+#                 lead.assigned_to = assigned_user  # Set the assigned user for the lead
+#             except CustomUserTypes.DoesNotExist:
+#                 # Handle the case when the selected user does not exist (optional)
+#                 messages.error(request, 'Invalid user ID selected for assignment.')
+                
+
+#         changes = {}
+
+#         # Check if each field has been changed and update the changes dictionary
+#         if lead.date_de_soumission != form_data['date_de_soumission']:
+#             changes['Date de soumission'] = form_data['date_de_soumission']
+# #avez_vous_travaille
+
+#         if lead.avez_vous_travaille != form_data['avez_vous_travaille']:
+#             changes['avez_vous_travaille'] = form_data['avez_vous_travaille']
+
+#         if lead.nom_de_la_campagne != form_data['nom_de_la_campagne']:
+#             changes['Nom de la campagne'] = form_data['nom_de_la_campagne']
+            
+#         if lead.nom_prenom != form_data['nom_prenom']:
+#             changes['Nom & Prenom'] = form_data['nom_prenom']
+            
+#         if lead.telephone != form_data['telephone']:
+#             changes['Telephone'] = form_data['telephone']
+        
+#         if lead.email != form_data['email']:
+#             changes['Email'] = form_data['email']
+        
+#         if lead.qualification != form_data['qualification']:
+#             changes['Qualification'] = form_data['qualification']
+            
+#         if lead.comments != form_data['comments']:
+#             changes['Comments'] = form_data['comments']
+
+#         # Repeat the above process for other fields
+
+#         # Update the lead instance with the form data
+#         lead.date_de_soumission = form_data['date_de_soumission']
+#         lead.nom_de_la_campagne = form_data['nom_de_la_campagne']
+#         lead.avez_vous_travaille = form_data['avez_vous_travaille']
+#         lead.nom_prenom = form_data['nom_prenom']
+#         lead.telephone = form_data['telephone']
+#         lead.email = form_data['email']
+#         lead.comments = form_data['comments']
+#         lead.qualification = form_data['qualification']
+    
+
+#         # Set the last_modified_by field to the current user
+#         lead.last_modified_by = request.user
+
+#         lead.save()
+#         #Saving the notification for assign
+#         if assigned_user_id:
+#             notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
+#             user = CustomUserTypes.objects.get(id=assigned_user_id)
+#             notification = Notification(user=user, lead=lead, message=notification_message)
+#             notification.save()
+#         messages.success(request, 'Lead edited successfully.')
+
+#         # Create a LogEntry to track the change made by the user
+#         content_type = ContentType.objects.get_for_model(Lead)
+#         username = request.user.username
+#         change_message = f'{username} edited the Lead. Changes: {", ".join([f"{field}: {value}" for field, value in changes.items()])}'
+#         log_entry = LogEntry.objects.create(
+#             user_id=request.user.id,
+#             content_type_id=content_type.id,
+#             object_id=lead.id,
+#             object_repr=f'{lead}',
+#             action_flag=CHANGE,
+#             change_message=change_message
+#         )
+
+#         context = {
+#             'lead': lead,
+#             'change_message': change_message,
+#             'log_entry': log_entry,
+#         }
+#         return JsonResponse({'success': True})
+
+#     return render(request, 'lead/lead_edit.html', {'lead': lead})
+
+
+import facebook
+from django.shortcuts import render
+from .models import Lead
+
+# def facebook_leads():
+#     # Replace 'YOUR_ACCESS_TOKEN' with your actual Facebook access token
+#     access_token = 'EAAKFt0cZC5JMBO4bgGrTOyZBZCcVUsZAU9IEzkv1HZBw4es9S7mpH2ezDBM0XcdFENsaHIZCjnYfNCGUCqwXjkIVEZBVYtrUY0ztmriTLCtCCWPD09WBuIVll18igE8Xrd44nvY4wVOGLE7SD5ea1icCEBoDZBcnTZBrueoXZC4CJDiVIpZAaZAMxeg0HM2jyBxJk76TEaQq85fwhIctNpoWfqMikgZDZD'
+
+#     # Create an instance of the Facebook object with your API keys
+#     graph = facebook.GraphAPI(access_token=access_token, version="3.0")
+
+#     # Replace 'YOUR_LEADGEN_FORM_ID' with the ID of your lead generation form
+#     leadgen_form_id = '314661597574782'
+
+#     # Specify the status parameter as 'all' to get all leads, including expired ones
+#     leads = graph.get_object(f"/{leadgen_form_id}/leads", fields='field_data,ad_id')
+
+#     # Process the retrieved leads and save them in your database
+#     for lead in leads['data']:
+#         date_de_soumission = None
+#         nom_de_la_campagne = None
+#         avez_vous_travaille = None
+#         nom_prenom = None
+#         telephone = None
+#         email = None
+#         qualification = None
+#         comments = None
+
+#         for field in lead['field_data']:
+#             if field['name'] == 'date_de_soumission':
+#                 date_de_soumission = field['values'][0]
+#             elif field['name'] == 'nom_de_la_campagne':
+#                 nom_de_la_campagne = field['values'][0]
+#             elif field['name'] == 'avez_vous_travaille':
+#                 avez_vous_travaille = field['values'][0]
+#             elif field['name'] == 'nom_prenom':
+#                 nom_prenom = field['values'][0]
+#             elif field['name'] == 'telephone':
+#                 telephone = field['values'][0]
+#             elif field['name'] == 'email':
+#                 email = field['values'][0]
+#             elif field['name'] == 'qualification':
+#                 qualification = field['values'][0]
+#             elif field['name'] == 'comments':
+#                 comments = field['values'][0]
+
+#         if 'ad_id' in lead:
+#             status = 'new'
+#         else:
+#             status = 'expired'
+
+#         # Save the lead to the database
+#         Lead.objects.create(
+#             date_de_soumission=date_de_soumission,
+#             nom_de_la_campagne=nom_de_la_campagne,
+#             avez_vous_travaille=avez_vous_travaille,
+#             nom_prenom=nom_prenom,
+#             telephone=telephone,
+#             email=email,
+#             qualification=qualification,
+#             comments=comments,
+#         )
+
+#     print("Leads retrieved and saved successfully.")
+
+# def facebook_leads_view(request):
+#     # Call the function to fetch leads from Facebook
+#     fetch_facebook_leads()
+
+#     # Retrieve all leads from the database
+#     leads = Lead.objects.all()
+
+#     # Pass the leads to the template context
+#     context = {
+#         'leads': leads
+#     }
+
+#     return render(request, 'lead/facebook_leads.html', context)
