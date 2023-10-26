@@ -1665,7 +1665,49 @@ def update_access_token(request):
     # Redirect the user to a relevant page (e.g., the page with access token management)
     return redirect('lead_dashboard')
 
+def add_company(request):
+    if request.method == "POST":
+        # Get the company name from the POST data
+        company_name = request.POST.get('name')
 
+        # Check if the company name is not empty
+        if company_name:
+            # Create and save the company object
+            company = Company(name=company_name)
+            company.save()
+            messages.success(request, f'Company "{company_name}" has been added successfully.')
+
+
+            # Redirect to a success page or another appropriate view
+            return redirect('add_company')  # Replace 'success_page_name' with the actual URL or view name
+         # Query the list of companies from the database
+    companies = Company.objects.all()  # This fetches all companies; you can adjust the query as needed
+
+    # Pass the list of companies to the template context
+    context = {
+        'companies': companies,
+    }
+
+    # Handle GET request or invalid POST data here
+    return render(request, 'lead/add_company.html',context)  # Replace 'add_company_form.html' with your form template
+
+
+
+def delete_company(request, company_id):
+    # Fetch the company object to be deleted, or return a 404 error if it doesn't exist
+    company = get_object_or_404(Company, pk=company_id)
+
+    if request.method == "POST":
+        # If the request method is POST, it means the user confirmed the deletion
+        company.delete()
+        return redirect('add_company')  # Redirect to the page where the list of companies is displayed
+
+    # Render a confirmation page (optional) to confirm the deletion
+    return render(request, 'lead/add_company.html', {'company': company})
+
+
+        
+        
 
 from .models import Lead, FacebookPage  # Import your Lead and FacebookPage models
 import csv
@@ -1785,7 +1827,7 @@ def map_facebook_pages_to_users(request):
         # Get the selected Facebook page and user who can fetch from the form submission
         selected_page_id = request.POST.get('selected_page')
         selected_user_id = request.POST.get('selected_user')
-        print("PageID",selected_page_id)
+        print("PageID", selected_page_id)
         print("Page User",selected_user_id)
 
         # Check if selected_page_id and selected_user_id are empty or None
@@ -1824,9 +1866,7 @@ def map_facebook_pages_to_users(request):
             error_message = "Selected Facebook Page or user not found."
             return render(request, 'error_template.html', {'error_message': error_message})
 
-    # ... rest of your view code ...
 
-    
 
     # Retrieve a list of all Facebook Pages and Users for the template
     facebook_pages = FacebookPage.objects.all()
@@ -1834,8 +1874,10 @@ def map_facebook_pages_to_users(request):
 
     # Filter and display only the unique Facebook pages
     unique_pages = FacebookPage.objects.values('page_name').distinct()
+    connected_pages = FacebookPage.objects.filter(user__in=users).distinct()
 
-    return render(request, 'lead/mapping_template.html', {'facebook_pages': unique_pages, 'users': users})
+    return render(request, 'lead/mapping_template.html', {'facebook_pages': connected_pages, 'users': users})
+
 
 def connect_page_to_all_users(selected_page):
     # Retrieve all existing users
@@ -2315,19 +2357,6 @@ def sales_lead(request):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 # views.py
 from django.shortcuts import render
 from .models import Lead
@@ -2696,7 +2725,7 @@ def transfer_leads(request):
 #         lead.save()
 #         #Saving the notification for assign
 #         if assigned_user_id:
-#             notification_message = f'Un nouveau prospect vous a été attribué: {lead.nom_de_la_campagne}'
+#             notification_message = f'You have been assigned a new lead: {lead.nom_de_la_campagne}'
 #             user = CustomUserTypes.objects.get(id=assigned_user_id)
 #             notification = Notification(user=user, lead=lead, message=notification_message)
 #             notification.save()
